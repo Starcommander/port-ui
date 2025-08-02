@@ -13,6 +13,9 @@ public abstract class Component
     parent = container;
   }
   public Container getParent() { return parent; }
+  /** Returns true, if render necessary, for example initial draw or something changed. */
+  public abstract boolean shouldRender();
+  public abstract void setShouldRender();
   public abstract void render(IFrame frame);
   public Point getSize() { return size; }
   public Point getPos() { return location; }

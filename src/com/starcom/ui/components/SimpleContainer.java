@@ -8,5 +8,21 @@ public class SimpleContainer extends Container {
     public void render(IFrame frame) {
         renderComponents(frame);
     }
-    
+
+    @Override
+    public boolean shouldRender() {
+        for (Component c : components)
+        {
+            if (c.shouldRender()) { return true; }
+        }
+        return false;
+    }
+
+    @Override
+    public void setShouldRender() {
+        for (Component c : components)
+        {
+            c.setShouldRender();
+        }
+    }
 }

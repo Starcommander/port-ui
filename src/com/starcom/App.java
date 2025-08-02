@@ -9,7 +9,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         FrameFactory.setFrameImpl("com.starcom.ui.frame.impl.SwingFrame");
         IFrame frame = FrameFactory.getFrame();
-        frame.setTitle("The portable GUI"); //TODO The title makes render invisible, but why?
+        frame.setTitle("The portable GUI");
         Button b = new Button();
         b.getSize().x = 300;
         b.getSize().y = 150;

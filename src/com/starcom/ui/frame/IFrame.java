@@ -7,7 +7,6 @@ import com.starcom.ui.components.Container;
 public interface IFrame
 {
   public IFrameRenderer getRenderer();
-  public IFont getFont();
   public void setVisible(boolean b);
   public Container getContent();
   public void dispose();

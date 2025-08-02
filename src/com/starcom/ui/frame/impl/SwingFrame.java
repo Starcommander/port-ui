@@ -6,7 +6,6 @@ import java.awt.Toolkit;
 
 import com.starcom.ui.components.SimpleContainer;
 import com.starcom.ui.components.Container;
-import com.starcom.ui.frame.IFont;
 import com.starcom.ui.frame.IFrame;
 import com.starcom.ui.frame.IFrameRenderer;
 import com.starcom.ui.model.Image;
@@ -74,26 +73,23 @@ public class SwingFrame implements IFrame
 
     private void renderLoop()
     {
-        System.out.println("Render started"); //TODO: Use a logger
         if (!jframe.isVisible())
         {
             System.out.println("Stop render as jframe not visible"); //TODO: Use a logger
             return;
         }
         getContent().layout();
-        getContent().render(this);
+        if (getContent().shouldRender())
+        {
+            System.out.println("Render of components started"); //TODO: Use a logger
+            getContent().render(this);
+        }
         SwingUtilities.invokeLater(() -> renderLoop());
     }
 
     @Override
     public Container getContent() {
         return content;
-    }
-
-    @Override
-    public IFont getFont() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getFont'");
     }
 
     @Override
