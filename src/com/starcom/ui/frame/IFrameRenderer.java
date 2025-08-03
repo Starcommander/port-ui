@@ -1,7 +1,6 @@
 package com.starcom.ui.frame;
 
 import com.starcom.ui.model.Color;
-import com.starcom.ui.model.Image;
 
 import java.io.InputStream;
 

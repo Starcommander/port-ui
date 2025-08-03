@@ -1,4 +1,6 @@
-package com.starcom.ui.model;
+package com.starcom.ui.frame;
+
+import com.starcom.ui.model.Point;
 
 public interface Image
 {

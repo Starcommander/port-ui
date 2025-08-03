@@ -1,6 +1,7 @@
 package com.starcom.ui.components;
 
 import com.starcom.ui.frame.IFrame;
+import com.starcom.ui.model.Action;
 
 public class SimpleContainer extends Container {
 
@@ -24,5 +25,14 @@ public class SimpleContainer extends Container {
         {
             c.setShouldRender();
         }
+    }
+
+    @Override
+    public boolean onAction(Action action, int xShift, int yShift) {
+        for (Component c : components)
+        {
+            if (c.onAction(action, getPos().x + xShift, getPos().y + yShift)) { return true; }
+        }
+        return false;
     }
 }

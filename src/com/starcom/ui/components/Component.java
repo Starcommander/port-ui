@@ -1,6 +1,7 @@
 package com.starcom.ui.components;
 
 import com.starcom.ui.frame.IFrame;
+import com.starcom.ui.model.Action;
 import com.starcom.ui.model.Point;
 
 public abstract class Component
@@ -17,6 +18,7 @@ public abstract class Component
   public abstract boolean shouldRender();
   public abstract void setShouldRender();
   public abstract void render(IFrame frame);
+  public abstract boolean onAction(Action action, int xShift, int yShift);
   public Point getSize() { return size; }
   public Point getPos() { return location; }
 }

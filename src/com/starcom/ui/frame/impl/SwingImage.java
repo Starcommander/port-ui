@@ -3,7 +3,7 @@ package com.starcom.ui.frame.impl;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import com.starcom.ui.model.Image;
+import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Point;
 
 public class SwingImage implements Image {

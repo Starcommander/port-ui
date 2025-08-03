@@ -1,13 +1,15 @@
 package com.starcom.ui.components;
 
 import java.util.ArrayList;
+
 import com.starcom.ui.frame.IFrame;
+import com.starcom.ui.model.Action;
 
 public abstract class Container extends Component
 {
   ArrayList<Component> components = new ArrayList<>();
 
-  public boolean onAction(String todo) //For components: Click, Touch/DnD, Key
+  public boolean onAction(Action action) //For components: Click, Touch/DnD, Key
   {
 //TODO: Iterate components, return true if consumed
     return false;

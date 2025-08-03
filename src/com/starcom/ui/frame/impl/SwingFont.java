@@ -1,8 +1,8 @@
 package com.starcom.ui.frame.impl;
 
 import com.starcom.ui.frame.Font;
+import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Color;
-import com.starcom.ui.model.Image;
 import com.starcom.ui.model.Point;
 
 import java.awt.FontMetrics;

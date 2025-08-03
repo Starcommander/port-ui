@@ -1,6 +1,5 @@
 package com.starcom.ui.frame;
 
-import com.starcom.ui.model.Image;
 import com.starcom.ui.model.Point;
 import com.starcom.ui.components.Container;
 

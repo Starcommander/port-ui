@@ -1,17 +1,15 @@
 package com.starcom.ui.frame.impl;
 
 import com.starcom.ui.model.Color;
-import com.starcom.ui.model.Image;
 
 import javax.swing.ImageIcon;
 
 import java.awt.Graphics;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.io.InputStream;
 
 import com.starcom.ui.frame.Font;
 import com.starcom.ui.frame.IFrameRenderer;
+import com.starcom.ui.frame.Image;
 
 public class SwingFrameRenderer implements IFrameRenderer
 {
@@ -20,33 +18,6 @@ public class SwingFrameRenderer implements IFrameRenderer
     public SwingFrameRenderer(SwingFrame sframe)
     {
         this.sframe = sframe;
-        this.sframe.jframe.getContentPane().addComponentListener(genListener());
-    }
-
-    public ComponentListener genListener()
-    {
-        return new ComponentListener() {
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-            }
-
-            @Override
-            public void componentMoved(ComponentEvent e) {
-                sframe.content.setShouldRender();
-            }
-
-            @Override
-            public void componentResized(ComponentEvent e) {
-                sframe.content.setShouldRender();
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-                sframe.content.setShouldRender();
-            }
-            
-        };
     }
 
     // public static Color fromSwing(java.awt.Color sc)
