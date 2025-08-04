@@ -22,6 +22,21 @@ public abstract class Container extends Component
       c.render(frame);
     }
   }
+  public boolean shouldRenderComponents() {
+    for (Component c : components)
+    {
+        if (c.shouldRender()) { return true; }
+    }
+    return false;
+  }
+  public boolean onActionComponents(Action action, int xShift, int yShift) {
+    for (Component c : components)
+    {
+      if (c.onAction(action, getPos().x + xShift, getPos().y + yShift)) { return true; }
+    }
+    return false;
+  }
+  
   public void setActionListener(String todo) //Close, Click, Touch/DnD, Key
   {
     //TODO: on action execute it on component

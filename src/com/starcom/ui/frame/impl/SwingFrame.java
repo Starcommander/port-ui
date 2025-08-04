@@ -11,7 +11,8 @@ import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseAdapter;
 
 import com.starcom.ui.components.SimpleContainer;
 import com.starcom.ui.components.Container;
@@ -65,12 +66,21 @@ public class SwingFrame implements IFrame
         return p;
     }
 
-    private MouseListener genMouseListener() {
-        return new MouseListener (){
+    private MouseAdapter genMouseListener() {
+        return new MouseAdapter (){
+
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e)
+            {
+                if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL)
+                {
+                    content.onAction(Action.fromMouseScrolled(e.getPoint().x, e.getPoint().y, e.getUnitsToScroll()), 0, 0);
+                }
+            }
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.MouseClicked, e.getPoint().x, e.getPoint().y, null),0,0));
+                content.onAction(Action.fromMouseClicked(e.getPoint().x, e.getPoint().y, e.getButton()-1),0,0);
             }
 
             @Override
@@ -83,12 +93,12 @@ public class SwingFrame implements IFrame
 
             @Override
             public void mousePressed(MouseEvent e) {
-                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.MousePressed, e.getPoint().x, e.getPoint().y, null),0,0));
+                content.onAction(Action.fromMousePressed(e.getPoint().x, e.getPoint().y, e.getButton()-1),0,0);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.MouseReleased, e.getPoint().x, e.getPoint().y, null),0,0));
+                content.onAction(Action.fromMouseReleased(e.getPoint().x, e.getPoint().y, e.getButton()-1),0,0);
             }};
     }
 
@@ -97,20 +107,17 @@ public class SwingFrame implements IFrame
 
             @Override
             public void keyPressed(KeyEvent e) {
-                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.KeyPressed, 0, 0, KeyEvent.getKeyText(e.getKeyCode())),0,0));
-                // TODO Auto-generated method stub
+                content.onAction(Action.fromKeyPressed(e.getKeyCode()),0,0);
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.KeyReleased, 0, 0, KeyEvent.getKeyText(e.getKeyCode())),0,0));
-                // TODO Auto-generated method stub
+                content.onAction(Action.fromKeyReleased(e.getKeyCode()),0,0);
             }
 
             @Override
             public void keyTyped(KeyEvent e) {
-                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.KeyTyped, 0, 0, KeyEvent.getKeyText(e.getKeyCode())),0,0));
-                // TODO Auto-generated method stub
+                content.onAction(Action.fromKeyTyped(e.getKeyChar()),0,0);
             }};
     }
 
