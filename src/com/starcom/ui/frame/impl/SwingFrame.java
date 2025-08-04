@@ -1,7 +1,10 @@
 package com.starcom.ui.frame.impl;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -16,6 +19,7 @@ import com.starcom.ui.frame.IFrame;
 import com.starcom.ui.frame.IFrameRenderer;
 import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Action;
+import com.starcom.ui.model.Color;
 import com.starcom.ui.model.Point;
 
 public class SwingFrame implements IFrame
@@ -26,6 +30,7 @@ public class SwingFrame implements IFrame
     public SwingFrame()
     {
         jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jframe.setContentPane(genContentPane());
         jframe.getContentPane().addComponentListener(genComponentListener());
 //        jframe.getContentPane().addKeyListener(genKeyListener()); //TODO: Add this
         jframe.getContentPane().addMouseListener(genMouseListener());
@@ -36,32 +41,54 @@ public class SwingFrame implements IFrame
         jframe.setLocation(0,0);
     }
 
+    private java.awt.Container genContentPane()
+    {
+        JPanel p = new JPanel()
+        {
+            @Override public void paintComponent(Graphics g)
+            {
+                if (getContent().shouldRender()) { super.paintComponent(g); }
+                SwingFrameRenderer.preRender(g);
+                getContent().layout();
+                if (getContent().shouldRender())
+                {
+                    System.out.println("Render of components started"); //TODO: Use a logger
+                    Color c = new Color(255, 255, 255, 255);
+                    renderer.drawFilledRect(c, SwingFrame.this.getSize().x, SwingFrame.this.getSize().y, 0, 0);
+                    SwingFrame.this.getContent().render(SwingFrame.this);
+                }
+                SwingFrameRenderer.postRender();
+            }
+        };
+        p.setLayout(jframe.getContentPane().getLayout());
+        p.setName(jframe.getName());
+        return p;
+    }
+
     private MouseListener genMouseListener() {
         return new MouseListener (){
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                content.onAction(new Action(Action.AType.MouseClicked, e.getPoint().x, e.getPoint().y, null),0,0);
+                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.MouseClicked, e.getPoint().x, e.getPoint().y, null),0,0));
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                content.onAction(new Action(Action.AType.MousePressed, e.getPoint().x, e.getPoint().y, null),0,0);
+                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.MousePressed, e.getPoint().x, e.getPoint().y, null),0,0));
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                content.onAction(new Action(Action.AType.MouseReleased, e.getPoint().x, e.getPoint().y, null),0,0);
+                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.MouseReleased, e.getPoint().x, e.getPoint().y, null),0,0));
             }};
     }
 
@@ -87,7 +114,7 @@ public class SwingFrame implements IFrame
             }};
     }
 
-    public ComponentListener genComponentListener()
+    private ComponentListener genComponentListener()
     {
         return new ComponentListener() {
 
@@ -149,28 +176,32 @@ public class SwingFrame implements IFrame
 
     @Override
     public void setVisible(boolean b) {
-        jframe.setVisible(b);
         SwingUtilities.invokeLater(() -> jframe.setVisible(b));
         if (b)
         {
-          SwingUtilities.invokeLater(() -> renderLoop());
+            SwingUtilities.invokeLater(() -> new Thread(() -> loopThread()).start());
         }
     }
 
-    private void renderLoop()
+    private void loopThread()
     {
-        if (!jframe.isVisible())
+        while (true)
         {
-            System.out.println("Stop render as jframe not visible"); //TODO: Use a logger
-            return;
+            if (!jframe.isVisible())
+            {
+                System.out.println("Stop render as jframe not visible"); //TODO: Use a logger
+                break;
+            }
+
+            getContent().layout();
+            jframe.getContentPane().repaint();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace(); //TODO: Use logger
+                break;
+            }
         }
-        getContent().layout();
-        if (getContent().shouldRender())
-        {
-            System.out.println("Render of components started"); //TODO: Use a logger
-            getContent().render(this);
-        }
-        SwingUtilities.invokeLater(() -> renderLoop());
     }
 
     @Override

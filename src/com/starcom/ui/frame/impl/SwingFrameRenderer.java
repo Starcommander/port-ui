@@ -15,20 +15,19 @@ public class SwingFrameRenderer implements IFrameRenderer
 {
     static final java.awt.Color TRANSP_COLOR = new java.awt.Color(0,0,0,0);
     SwingFrame sframe;
+    static Graphics gr;
     public SwingFrameRenderer(SwingFrame sframe)
     {
         this.sframe = sframe;
     }
 
-    // public static Color fromSwing(java.awt.Color sc)
-    // {
-    //     Color c = new Color();
-    //     c.r = sc.getRed();
-    //     c.g = sc.getGreen();
-    //     c.b = sc.getBlue();
-    //     c.a = sc.getAlpha();
-    //     return c;
-    // }
+    public static void preRender(Graphics graph) { gr = graph; }
+    public static void postRender() { gr = null; }
+
+//    public static Color fromSwing(java.awt.Color sc)
+//    {
+//        return new Color(sc.getRed(), sc.getGreen(), sc.getBlue(), sc.getAlpha());
+//    }
 
     public static java.awt.Color toSwing(Color c)
     {
@@ -37,27 +36,21 @@ public class SwingFrameRenderer implements IFrameRenderer
 
     @Override
     public void drawFilledRect(Color color, int width, int height, int x, int y) {
-        Graphics gr = sframe.jframe.getContentPane().getGraphics();
         gr.setColor(toSwing(color));
         gr.fillRect(x, y, width, height);
-        gr.dispose();
     }
 
     @Override
     public void drawLine(Color color, int th, int x1, int y1, int x2, int y2) {
-        Graphics gr = sframe.jframe.getContentPane().getGraphics();
         gr.setColor(toSwing(color));
         gr.drawLine(x1, y1, x2, y2);
-        gr.dispose();
         //TODO: Use FillRect instead, and use th.
     }
 
     @Override
     public void drawImage(Image img, int x, int y) {
         SwingImage sImage = (SwingImage)img;
-        Graphics gr = sframe.jframe.getContentPane().getGraphics();
         gr.drawImage(sImage.parent, x, y, TRANSP_COLOR, null);
-        gr.dispose();
     }
 
     @Override
@@ -67,9 +60,7 @@ public class SwingFrameRenderer implements IFrameRenderer
 
     @Override
     public void clear() {
-        Graphics gr = sframe.jframe.getContentPane().getGraphics();
         gr.clearRect(0, 0, sframe.jframe.getWidth(), sframe.jframe.getHeight());
-        gr.dispose();
     }
 
     @Override
