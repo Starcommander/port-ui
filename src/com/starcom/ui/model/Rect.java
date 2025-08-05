@@ -29,4 +29,10 @@ public class Rect
   {
     return pos.equals(other.pos) && size.equals(other.size);
   }
+
+  @Override
+  public String toString()
+  {
+    return super.toString() + " X=" + pos.x + " Y=" + pos.y + " W=" + size.x + " H=" + size.y;
+  }
 }

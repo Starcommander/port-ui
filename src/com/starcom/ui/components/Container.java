@@ -14,12 +14,11 @@ public abstract class Container extends Component
   {
 //TODO: Layout all components
   }
-
-  protected void renderComponents(IFrame frame)
+  protected void renderComponents(IFrame frame, IFrameRenderer frameRenderer, int xShift, int yShift)
   {
     for (Component c : components)
     {
-      c.render(frame);
+      c.render(frame, frameRenderer, getPos().x + xShift, getPos().y + yShift);
     }
   }
   public boolean shouldRenderComponents() {
@@ -32,18 +31,21 @@ public abstract class Container extends Component
   public boolean onActionComponents(Action action, int xShift, int yShift) {
     for (Component c : components)
     {
-      if (c.onAction(action, getPos().x + xShift, getPos().y + yShift)) { return true; }
+      if (c.onAction(action, xShift - getPos().x, yShift - getPos().y)) { return true; }
     }
     return false;
   }
-  
+
   public void setActionListener(String todo) //Close, Click, Touch/DnD, Key
   {
     //TODO: on action execute it on component
   }
   public void addComponent(Component c)
   {
+    if (c.getParent() != null) { throw new IllegalStateException("Component already inserted into other container."); }
+    if (c == this) { throw new IllegalStateException("Cannot insert same container into itshelf."); }
     components.add(c);
+    c.setParent(this);
   }
   public boolean clearComponent(Component c)
   {
@@ -55,8 +57,4 @@ public abstract class Container extends Component
     //TODO
   }
 
-  /** Returns an IFrameRenderer for use in all containing components to render.
-    * That may be a wrapper over raw IFrameRenderer of IFrame, but shifts x and y coordinates, or clips some area.
-    * @return A wrapper, or IFrameRenderer of IFrame. */
-  public abstract IFrameRenderer getInternalRenderer();
 }

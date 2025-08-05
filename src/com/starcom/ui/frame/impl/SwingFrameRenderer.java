@@ -43,9 +43,9 @@ public class SwingFrameRenderer implements IFrameRenderer
     }
 
     @Override
-    public void drawFilledRect(Color color, int width, int height, int x, int y) {
+    public void drawFilledRect(Color color, int x, int y, int w, int h) {
         gr.setColor(toSwing(color));
-        gr.fillRect(x, y, width, height);
+        gr.fillRect(x, y, w, h);
     }
 
     @Override
@@ -65,15 +65,19 @@ public class SwingFrameRenderer implements IFrameRenderer
     @Override
     public void drawPartialImage(Image img, int x, int y, Rect visibleRect)
     {
-      Image tmpImg = img.getScaledInstance(img.getSize());
-      Graphics imgGraph = ((SwingImage)tmpImg).parent.createGraphics();
-      imgGraph.setColor(TRANSP_COLOR);
-      if (visibleRect.pos.x != 0) { imgGraph.fillRect(0,0,visibleRect.pos.x, img.getSize().y); }
-      if (visibleRect.pos.y != 0) { imgGraph.fillRect(0,0,img.getSize().x, visibleRect.pos.y); }
-      if ((visibleRect.pos.x+visibleRect.size.x) < img.getSize().x) { imgGraph.fillRect(visibleRect.pos.x+visibleRect.size.x,0,img.getSize().x, img.getSize().y); }
-      if ((visibleRect.pos.y+visibleRect.size.y) < img.getSize().x) { imgGraph.fillRect(0,visibleRect.pos.y+visibleRect.size.y,img.getSize().x, img.getSize().y); }
-      imgGraph.dispose();
-      drawImage(tmpImg, x, y);
+        if (visibleRect.pos.x<0) throw new IllegalStateException("visibleRect.pos.x must not be negative");
+        if (visibleRect.pos.y<0) throw new IllegalStateException("visibleRect.pos.y must not be negative");
+        if ((visibleRect.pos.x + visibleRect.size.x) > img.getSize().x) throw new IllegalStateException("visibleRect.size.x is outside of image to draw");
+        if ((visibleRect.pos.y + visibleRect.size.y) > img.getSize().y) throw new IllegalStateException("visibleRect.size.y is outside of image to draw");
+        Image tmpImg = img.getScaledInstance(img.getSize());
+        Graphics imgGraph = ((SwingImage)tmpImg).parent.createGraphics();
+        ((Graphics2D)imgGraph).setBackground(TRANSP_COLOR);
+        if (visibleRect.pos.x != 0) { imgGraph.clearRect(0,0,visibleRect.pos.x, img.getSize().y); }
+        if (visibleRect.pos.y != 0) { imgGraph.clearRect(0,0,img.getSize().x, visibleRect.pos.y); }
+        if ((visibleRect.pos.x+visibleRect.size.x) < img.getSize().x) { imgGraph.clearRect(visibleRect.pos.x+visibleRect.size.x,0,img.getSize().x, img.getSize().y); }
+        if ((visibleRect.pos.y+visibleRect.size.y) < img.getSize().x) { imgGraph.clearRect(0,visibleRect.pos.y+visibleRect.size.y,img.getSize().x, img.getSize().y); }
+        imgGraph.dispose();
+        drawImage(tmpImg, x, y);
     }
 
     @Override

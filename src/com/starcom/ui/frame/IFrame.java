@@ -1,13 +1,13 @@
 package com.starcom.ui.frame;
 
 import com.starcom.ui.model.Point;
-import com.starcom.ui.components.Container;
+import com.starcom.ui.components.SimpleContainer;
 
 public interface IFrame
 {
-  public IFrameRenderer getRenderer();
+  public IFrameRenderer getRendererImpl();
   public void setVisible(boolean b);
-  public Container getContent();
+  public SimpleContainer getContent();
   public void dispose();
   public Point getSize();
   public Point getMaxSize();

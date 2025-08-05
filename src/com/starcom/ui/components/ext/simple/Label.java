@@ -3,6 +3,7 @@ package com.starcom.ui.components.ext.simple;
 import com.starcom.ui.components.Component;
 import com.starcom.ui.frame.Font;
 import com.starcom.ui.frame.IFrame;
+import com.starcom.ui.frame.IFrameRenderer;
 import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Action;
 import com.starcom.ui.model.Color;
@@ -28,10 +29,10 @@ public class Label extends Component {
     }
 
     @Override
-    public void render(IFrame frame) {
+    public void render(IFrame frame, IFrameRenderer frameRenderer, int xShift, int yShift) {
         logger.fine("Start render label");
 
-        Font f = frame.getRenderer().newFont();
+        Font f = frameRenderer.newFont();
         f.setSize(16);
         Color col = new Color(0, 0, 255, 255);
         Image fImg;
@@ -60,7 +61,7 @@ public class Label extends Component {
         }
         int x = 5 + getPos().x;
         int y = getPos().y + (getSize().y/2) - (fImg.getSize().y/2);
-        frame.getRenderer().drawImage(fImg, x, y);
+        frameRenderer.drawImage(fImg, x + xShift, y + yShift);
         doRender = false;
     }
 

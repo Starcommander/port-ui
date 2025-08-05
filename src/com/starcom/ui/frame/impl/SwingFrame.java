@@ -15,7 +15,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseAdapter;
 
 import com.starcom.ui.components.SimpleContainer;
-import com.starcom.ui.components.Container;
 import com.starcom.ui.frame.IFrame;
 import com.starcom.ui.frame.IFrameRenderer;
 import com.starcom.ui.frame.Image;
@@ -26,7 +25,7 @@ import com.starcom.ui.model.Point;
 public class SwingFrame implements IFrame
 {
     JFrame jframe = new JFrame();
-    Container content = new SimpleContainer();
+    SimpleContainer content = new SimpleContainer();
     SwingFrameRenderer renderer;
     public SwingFrame()
     {
@@ -35,6 +34,7 @@ public class SwingFrame implements IFrame
         jframe.getContentPane().addComponentListener(genComponentListener());
         jframe.getContentPane().addKeyListener(genKeyListener());
         jframe.getContentPane().addMouseListener(genMouseListener());
+        jframe.getContentPane().addMouseWheelListener(genMouseListener());
         renderer = new SwingFrameRenderer(this);
 
         Point p = getMaxSize();
@@ -53,10 +53,9 @@ public class SwingFrame implements IFrame
                 getContent().layout();
                 if (getContent().shouldRender())
                 {
-                    System.out.println("Render of components started"); //TODO: Use a logger
                     Color c = new Color(255, 255, 255, 255);
                     renderer.drawFilledRect(c, SwingFrame.this.getSize().x, SwingFrame.this.getSize().y, 0, 0);
-                    SwingFrame.this.getContent().render(SwingFrame.this);
+                    SwingFrame.this.getContent().render(SwingFrame.this,getRendererImpl(),0,0);
                 }
                 SwingFrameRenderer.postRender();
             }
@@ -74,7 +73,7 @@ public class SwingFrame implements IFrame
             {
                 if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL)
                 {
-                    content.onAction(Action.fromMouseScrolled(e.getPoint().x, e.getPoint().y, e.getUnitsToScroll()), 0, 0);
+                    content.onAction(Action.fromMouseScrolled(e.getPoint().x, e.getPoint().y, e.getUnitsToScroll()*8), 0, 0);
                 }
             }
 
@@ -148,7 +147,7 @@ public class SwingFrame implements IFrame
     }
 
     @Override
-    public IFrameRenderer getRenderer() {
+    public IFrameRenderer getRendererImpl() {
         return renderer;
     }
 
@@ -212,7 +211,7 @@ public class SwingFrame implements IFrame
     }
 
     @Override
-    public Container getContent() {
+    public SimpleContainer getContent() {
         return content;
     }
 

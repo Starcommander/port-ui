@@ -1,31 +1,23 @@
 package com.starcom.ui.components;
 
-import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.IFrame;
 import com.starcom.ui.frame.IFrameRenderer;
 import com.starcom.ui.frame.PartialFrameRenderer;
 import com.starcom.ui.model.Action;
+import com.starcom.ui.model.Point;
 import com.starcom.ui.model.Rect;
+import com.starcom.ui.model.Action.AType;
 
 public class ScrollPane extends Container
 {
-    PartialFrameRenderer renderer;
+    PartialFrameRenderer internalRenderer = new PartialFrameRenderer();
+    Rect visibleRect = new Rect(0,0,0,0);
     boolean shouldRenderScrollpane = true;
+    Point scrollPos = new Point(0,0);
     public ScrollPane(boolean hBar, boolean vBar)
     {
-      if (vBar) throw new IllegalStateException("The vBar is currently not implemented in Scrollpane");
-      if (!hBar) throw new IllegalStateException("The ScrollPane without hBar does not make sense");
-      IFrameRenderer parentRenderer;
-      if (parent != null) { parentRenderer = parent.getInternalRenderer(); }
-      else { parentRenderer = FrameFactory.getFrame().getRenderer(); }
-      Rect visibleRect = new Rect(getPos().x, getPos().y, getSize().x, getSize().y);
-      renderer = new PartialFrameRenderer(parentRenderer, visibleRect); //TODO: Update visibleRect
-    }
-
-    @Override
-    public IFrameRenderer getInternalRenderer()
-    {
-      return renderer;
+      if (hBar) throw new IllegalStateException("The hBar is currently not implemented in Scrollpane");
+      if (!vBar) throw new IllegalStateException("The ScrollPane without vBar does not make sense");
     }
 
     @Override
@@ -39,16 +31,23 @@ public class ScrollPane extends Container
     }
 
     @Override
-    public void render(IFrame frame) {
+    public void render(IFrame frame, IFrameRenderer frameRenderer, int xShift, int yShift) {
       shouldRenderScrollpane = false;
-      
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'render'");
+      visibleRect.set(getPos().x, getPos().y, getSize().x, getSize().y);
+      internalRenderer.set(frameRenderer, visibleRect);
+      renderComponents(frame, internalRenderer, xShift - scrollPos.x, yShift - scrollPos.y);
     }
 
     @Override
     public boolean onAction(Action action, int xShift, int yShift) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("Unimplemented method 'onAction'");
+      boolean consumed = onActionComponents(action, xShift + scrollPos.x, yShift + scrollPos.y);
+      if (consumed) { return true; }
+      if (action.type == AType.MouseScrolled)
+      { //TODO: Check only for scroll actions that are inside
+        scrollPos.y = scrollPos.y - action.value;
+        shouldRenderScrollpane = true;
+        return true;
+      }
+      return false;
     }
 }
