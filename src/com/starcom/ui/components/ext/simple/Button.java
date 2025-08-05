@@ -46,17 +46,22 @@ public class Button extends Component {
 
     @Override
     public boolean onAction(Action action, int xShift, int yShift) {
+        if (action.type == Action.AType.MouseReleased && buttonDown)
+        {
+            buttonDown = false;
+            setShouldRender();
+            return true;
+        }
+        if (!intersect(action.x + xShift, action.y + yShift)) { return false; }
         if (action.type == Action.AType.MousePressed)
         {
             buttonDown = true;
             setShouldRender();
             return true;
         }
-        else if (action.type == Action.AType.MouseReleased)
+        if (action.type == Action.AType.MouseClicked)
         {
-            buttonDown = false;
-            setShouldRender();
-            return true;
+            System.out.println("Button clicked!");
         }
         return false;
     }

@@ -13,6 +13,15 @@ public abstract class Component
   {
     parent = container;
   }
+  /** @return true, if coordinate is inside of this component. */
+  public boolean intersect(int x, int y)
+  {
+    if (x < getPos().x) { return false; }
+    if (y < getPos().y) { return false; }
+    if (x > (getPos().x + getSize().x)) { return false; }
+    if (y > (getPos().y + getSize().y)) { return false; }
+    return true;
+  }
   public Container getParent() { return parent; }
   /** Returns true, if render necessary, for example initial draw or something changed. */
   public abstract boolean shouldRender();
