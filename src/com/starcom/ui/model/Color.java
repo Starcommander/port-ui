@@ -3,6 +3,7 @@ package com.starcom.ui.model;
 public class Color
 {
   public static Color BLUE = new Color(0, 0, 255, 255);
+  public static Color GRAY = new Color(50, 50, 50, 255);
 
   public int r;
   public int g;

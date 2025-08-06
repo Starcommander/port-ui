@@ -11,10 +11,22 @@ public class Point
     this.y = y;
   }
 
+  public void set(int x, int y)
+  {
+    this.x = x;
+    this.y = y;
+  }
+
   public boolean equals(Point other)
   {
     if (x != other.x) { return false; }
     if (y != other.y) { return false; }
     return true;
+  }
+
+  @Override
+  public String toString()
+  {
+    return super.toString() + ": x=" + x + " y=" + y;
   }
 }

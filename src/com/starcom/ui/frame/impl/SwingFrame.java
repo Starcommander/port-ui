@@ -35,6 +35,7 @@ public class SwingFrame implements IFrame
         jframe.getContentPane().addKeyListener(genKeyListener());
         jframe.getContentPane().addMouseListener(genMouseListener());
         jframe.getContentPane().addMouseWheelListener(genMouseListener());
+        jframe.getContentPane().addMouseMotionListener(genMouseListener());
         renderer = new SwingFrameRenderer(this);
 
         Point p = getMaxSize();
@@ -83,11 +84,8 @@ public class SwingFrame implements IFrame
             }
 
             @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
+            public void mouseDragged(MouseEvent e) {
+                content.onAction(Action.fromMouseDragged(e.getPoint().x, e.getPoint().y),0,0);
             }
 
             @Override

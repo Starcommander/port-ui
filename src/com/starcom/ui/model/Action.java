@@ -1,7 +1,7 @@
 package com.starcom.ui.model;
 
 public class Action {
-    public enum AType {MousePressed, MouseReleased, MouseClicked, MouseScrolled, KeyPressed, KeyReleased, KeyTyped}
+    public enum AType {MousePressed, MouseReleased, MouseClicked, MouseDragged, MouseScrolled, KeyPressed, KeyReleased, KeyTyped}
 
     public AType type;
     public int x;
@@ -24,6 +24,7 @@ public class Action {
     public static Action fromMousePressed(int x, int y, int btn) { return new Action(AType.MousePressed, x, y, btn); }
     public static Action fromMouseReleased(int x, int y, int btn) { return new Action(AType.MouseReleased, x, y, btn); }
     public static Action fromMouseClicked(int x, int y, int btn) { return new Action(AType.MouseClicked, x, y, btn); }
+    public static Action fromMouseDragged(int x, int y) { return new Action(AType.MouseDragged, x, y, 0); }
     public static Action fromKeyPressed(int vk_keycode) { return new Action(AType.KeyPressed, 0, 0, vk_keycode); }
     public static Action fromKeyReleased(int vk_keycode) { return new Action(AType.KeyReleased, 0, 0, vk_keycode); }
     public static Action fromKeyTyped(int character) { return new Action(AType.KeyTyped, 0, 0, character); }
