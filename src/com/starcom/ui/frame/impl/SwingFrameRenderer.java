@@ -2,10 +2,17 @@ package com.starcom.ui.frame.impl;
 
 import com.starcom.ui.model.Color;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 import com.starcom.ui.frame.Font;
 import com.starcom.ui.frame.IFrameRenderer;
@@ -14,6 +21,7 @@ import com.starcom.ui.frame.Image;
 public class SwingFrameRenderer implements IFrameRenderer
 {
     static final java.awt.Color TRANSP_COLOR = new java.awt.Color(0,0,0,0);
+    Logger logger = Logger.getLogger(SwingFrameRenderer.class.getName());
     SwingFrame sframe;
     static Graphics gr;
     public SwingFrameRenderer(SwingFrame sframe)
@@ -43,8 +51,9 @@ public class SwingFrameRenderer implements IFrameRenderer
     @Override
     public void drawLine(Color color, int th, int x1, int y1, int x2, int y2) {
         gr.setColor(toSwing(color));
-        gr.drawLine(x1, y1, x2, y2);
-        //TODO: Use FillRect instead, and use th.
+        Graphics2D g2 = (Graphics2D) gr;
+        g2.setStroke(new BasicStroke(10));
+        g2.draw(new Line2D.Float(x1, y1, x2, y2));
     }
 
     @Override
@@ -59,20 +68,13 @@ public class SwingFrameRenderer implements IFrameRenderer
     }
 
     @Override
-    public void clear() {
-        gr.clearRect(0, 0, sframe.jframe.getWidth(), sframe.jframe.getHeight());
-    }
-
-    @Override
-    public Image scaleImage(Image i) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'scaleImage'");
-    }
-
-    @Override
     public Image loadImage(InputStream s) {
-        // TODO Auto-generated method stub
-        ImageIcon i = new ImageIcon("");
-        throw new UnsupportedOperationException("Unimplemented method 'loadImage'");
+        try {
+            BufferedImage img = ImageIO.read(s);
+            return new SwingImage(img);
+        } catch (IOException e) {
+            logger.severe("Cannot load image: " + e);
+            return null;
+        }
     }
 }

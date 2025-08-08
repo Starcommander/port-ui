@@ -19,7 +19,5 @@ public interface IFrameRenderer
 //  public void drawFilledEllipse(Color color, int x, int y, int w, int h);
   public void drawLine(Color color, int th, int x1, int y1, int x2, int y2);
   public void drawImage(Image img, int x, int y);
-  public Image scaleImage(Image i);
   public Image loadImage(InputStream s);
-  public void clear();
 }
