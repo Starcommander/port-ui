@@ -3,7 +3,6 @@ package com.starcom.ui.frame.impl;
 import com.starcom.ui.model.Color;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics;
@@ -52,7 +51,7 @@ public class SwingFrameRenderer implements IFrameRenderer
     public void drawLine(Color color, int th, int x1, int y1, int x2, int y2) {
         gr.setColor(toSwing(color));
         Graphics2D g2 = (Graphics2D) gr;
-        g2.setStroke(new BasicStroke(10));
+        g2.setStroke(new BasicStroke(th));
         g2.draw(new Line2D.Float(x1, y1, x2, y2));
     }
 

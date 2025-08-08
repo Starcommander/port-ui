@@ -7,7 +7,6 @@ import com.starcom.ui.frame.IFrame;
 public class App {
 
     public static void main(String[] args) throws Exception {
-        FrameFactory.setFrameImpl("com.starcom.ui.frame.impl.SwingFrame");
         IFrame frame = FrameFactory.getFrame();
         frame.setTitle("The portable GUI");
         Button b = new Button("Simple Button");
