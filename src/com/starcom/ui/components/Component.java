@@ -1,5 +1,6 @@
 package com.starcom.ui.components;
 
+import com.starcom.ui.frame.IActionListener;
 import com.starcom.ui.frame.IFrame;
 import com.starcom.ui.model.Action;
 import com.starcom.ui.model.Point;
@@ -9,10 +10,17 @@ public abstract class Component
   Point size = new Point();
   Point location = new Point();
   Container parent;
+  IActionListener al;
+
   public void attachTo(Container container)
   {
     parent = container;
   }
+
+  /** Sets the IActionListener that can be used by implementing class. */
+  public void setActionListener(IActionListener al) { this.al = al; }
+  public IActionListener getActionListener() { return al; }
+
   /** @return true, if coordinate is inside of this component. */
   public boolean intersect(int x, int y)
   {

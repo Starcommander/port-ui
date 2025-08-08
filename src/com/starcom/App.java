@@ -10,7 +10,7 @@ public class App {
         FrameFactory.setFrameImpl("com.starcom.ui.frame.impl.SwingFrame");
         IFrame frame = FrameFactory.getFrame();
         frame.setTitle("The portable GUI");
-        Button b = new Button();
+        Button b = new Button("Simple Button");
         b.getSize().x = 300;
         b.getSize().y = 150;
         b.getPos().x = 30;
