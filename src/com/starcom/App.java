@@ -27,6 +27,7 @@ public class App {
         sp.getPos().y = 30;
         Button b = genSimpleButton();
         b.getSize().y = 800;
+        b.getSize().x = 800;
         sp.addComponent(b);
         frame.getContent().addComponent(sp);
     }

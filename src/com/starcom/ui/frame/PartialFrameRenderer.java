@@ -74,7 +74,7 @@ public class PartialFrameRenderer implements IFrameRenderer
     //TOP
     Point rp1 = new Point(rect.pos.x, rect.pos.y);
     Point rp2 = new Point(rect.pos.x + rect.size.x, rect.pos.y);
-    Point intersection = lineLineIntersection(rp1, rp2, p1, p2, true);
+    Point intersection = lineLineIntersection(rp1, rp2, p1, p2, true, true);
     if (intersection == null) {}
     else if (p1Inside)
     {
@@ -100,7 +100,7 @@ public class PartialFrameRenderer implements IFrameRenderer
     //BOTTOM
     rp1.set(rect.pos.x, rect.pos.y + rect.size.y);
     rp2.set(rect.pos.x + rect.size.x, rect.pos.y + rect.size.y);
-    intersection = lineLineIntersection(rp1, rp2, p1, p2, true);
+    intersection = lineLineIntersection(rp1, rp2, p1, p2, true, true);
     if (intersection == null) {}
     else if (p1Inside)
     {
@@ -126,7 +126,7 @@ public class PartialFrameRenderer implements IFrameRenderer
     //Left
     rp1.set(rect.pos.x, rect.pos.y);
     rp2.set(rect.pos.x, rect.pos.y + rect.size.y);
-    intersection = lineLineIntersection(rp1, rp2, p1, p2, true);
+    intersection = lineLineIntersection(rp1, rp2, p1, p2, true, true);
     if (intersection == null) {}
     else if (p1Inside)
     {
@@ -152,7 +152,7 @@ public class PartialFrameRenderer implements IFrameRenderer
     //RIGHT
     rp1.set(rect.pos.x + rect.size.x, rect.pos.y);
     rp2.set(rect.pos.x + rect.size.x, rect.pos.y + rect.size.y);
-    intersection = lineLineIntersection(rp1, rp2, p1, p2, true);
+    intersection = lineLineIntersection(rp1, rp2, p1, p2, true, true);
     if (intersection == null) {}
     else if (p1Inside)
     {
@@ -186,7 +186,7 @@ public class PartialFrameRenderer implements IFrameRenderer
     return true;
   }
 
-  public static Point lineLineIntersection(Point pa, Point pb, Point pc, Point pd, boolean limitCD)
+  public static Point lineLineIntersection(Point pa, Point pb, Point pc, Point pd, boolean limitAB, boolean limitCD)
   {
       double a1 = pb.y - pa.y;
       double b1 = pa.x - pb.x;
@@ -205,6 +205,13 @@ public class PartialFrameRenderer implements IFrameRenderer
       {
           double x = (b2*c1 - b1*c2)/determinant;
           double y = (a1*c2 - a2*c1)/determinant;
+          if (limitAB)
+          {
+            if (x < pa.x && x < pb.x) { return null; } // Intersection left of lineCD
+            if (x > pa.x && x > pb.x) { return null; } // Intersection right of lineCD
+            if (y < pa.y && y < pb.y) { return null; } // Intersection over lineCD
+            if (y > pa.y && y > pb.y) { return null; } // Intersection under lineCD
+          }
           if (limitCD)
           {
             if (x < pc.x && x < pd.x) { return null; } // Intersection left of lineCD

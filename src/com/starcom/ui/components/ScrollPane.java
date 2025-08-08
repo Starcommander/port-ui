@@ -106,5 +106,14 @@ public class ScrollPane extends Container
         scrollPos.y = newVal;
         shouldRenderScrollpane = true;
       }
+      boolean right = x > 0;
+      newVal = scrollPos.x + x;
+      if (newVal < 0) {} // Left edge reached
+      else if (right && (getComponentsSize().x - scrollPos.x) < getSize().x) {} // Right edge reached
+      else
+      {
+        scrollPos.x = newVal;
+        shouldRenderScrollpane = true;
+      }
     }
 }
