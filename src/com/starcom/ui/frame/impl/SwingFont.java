@@ -11,9 +11,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
-public class SwingFont extends Font {
-
-    SwingFrameRenderer renderer;
+public class SwingFont extends Font
+{
     java.awt.Font sFont;
     BufferedImage emptyImg = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 
@@ -47,7 +46,7 @@ public class SwingFont extends Font {
         Graphics2D graph = img.createGraphics();
         updateSwingFont();
         graph.setFont(sFont);
-        graph.setColor(SwingFrameRenderer.toSwing(color));
+        graph.setColor(SwingFrameGraphics.toSwing(color));
         graph.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graph.drawString(txt, 0, graph.getFontMetrics().getAscent());
         graph.dispose();

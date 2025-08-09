@@ -14,17 +14,17 @@ import java.io.InputStream;
 import java.util.logging.Logger;
 
 import com.starcom.ui.frame.Font;
-import com.starcom.ui.frame.IFrameRenderer;
+import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Rect;
 
-public class SwingFrameRenderer implements IFrameRenderer
+public class SwingFrameGraphics implements IFrameGraphics
 {
     static final java.awt.Color TRANSP_COLOR = new java.awt.Color(0,0,0,0);
-    Logger logger = Logger.getLogger(SwingFrameRenderer.class.getName());
+    Logger logger = Logger.getLogger(SwingFrameGraphics.class.getName());
     SwingFrame sframe;
     static Graphics gr;
-    public SwingFrameRenderer(SwingFrame sframe)
+    public SwingFrameGraphics(SwingFrame sframe)
     {
         this.sframe = sframe;
     }

@@ -5,7 +5,7 @@ import com.starcom.ui.components.SimpleContainer;
 
 public interface IFrame
 {
-  public IFrameRenderer getRendererImpl();
+  public IFrameGraphics getGraphicsImpl();
   public void setVisible(boolean b);
   public SimpleContainer getContent();
   public void dispose();

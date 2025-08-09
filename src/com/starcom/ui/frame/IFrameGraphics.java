@@ -5,7 +5,7 @@ import com.starcom.ui.model.Rect;
 
 import java.io.InputStream;
 
-public interface IFrameRenderer
+public interface IFrameGraphics
 {
   public default void drawRect(Color color, int th, int x, int y, int w, int h)
   {

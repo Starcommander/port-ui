@@ -2,11 +2,11 @@ package com.starcom.ui.components.ext.simple;
 
 import com.starcom.ui.components.Component;
 import com.starcom.ui.frame.Font;
-import com.starcom.ui.frame.IFrame;
-import com.starcom.ui.frame.IFrameRenderer;
+import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Action;
 import com.starcom.ui.model.Color;
+import com.starcom.ui.render.IRenderer;
 
 import java.util.logging.Logger;
 
@@ -24,22 +24,7 @@ public class TextField extends Component {
     public void setText(String title)
     {
         this.title = title;
-        setShouldRender();
-    }
-
-    @Override
-    public void render(IFrame frame, IFrameRenderer frameRenderer, int xShift, int yShift) {
-        logger.fine("Start render label");
-
-        Font f = frameRenderer.newFont();
-        f.setSize(16);
-        Color col = new Color(0, 0, 255, 255);
-        Image fImg = f.genTextImage(title, col);
-        int x = 5 + getPos().x;
-        int y = getPos().y + (getSize().y/2) - (fImg.getSize().y/2);
-        frameRenderer.drawImage(fImg, x + xShift, y + yShift);
-        doRender = false;
-        //TODO: Implement Cursor and handle key-events.
+        setShouldRender(true);
     }
 
     @Override
@@ -48,12 +33,25 @@ public class TextField extends Component {
     }
 
     @Override
-    public void setShouldRender() {
-        doRender = true;
+    public void setShouldRender(boolean shouldRender) {
+        doRender = shouldRender;
     }
 
     @Override
     public boolean onAction(Action action, int xShift, int yShift) {
         return false;
+    }
+
+    @Override
+    public IRenderer getFallbackRenderer() {
+        return (c,g,x,y) -> render(c, g, x, y);
+    }
+
+    private void render(Component c, IFrameGraphics g, int xShift, int yShift)
+    {
+        Font f = g.newFont();
+        Image i = f.genTextImage(title, Color.BLUE);
+        g.drawImage(i, c.getPos().x + xShift, c.getPos().y + yShift);
+        c.setShouldRender(false);
     }
 }

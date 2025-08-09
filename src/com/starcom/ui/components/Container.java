@@ -2,8 +2,7 @@ package com.starcom.ui.components;
 
 import java.util.ArrayList;
 
-import com.starcom.ui.frame.IFrame;
-import com.starcom.ui.frame.IFrameRenderer;
+import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.model.Action;
 
 public abstract class Container extends Component
@@ -14,11 +13,11 @@ public abstract class Container extends Component
   {
 //TODO: Layout all components
   }
-  protected void renderComponents(IFrame frame, IFrameRenderer frameRenderer, int xShift, int yShift)
+  public static void renderComponents(Container c, IFrameGraphics frameGraphics, int xShift, int yShift)
   {
-    for (Component c : components)
+    for (Component child : c.components)
     {
-      c.render(frame, frameRenderer, getPos().x + xShift, getPos().y + yShift);
+      child.getRenderer().render(child, frameGraphics, c.getPos().x + xShift, c.getPos().y + yShift);
     }
   }
   public boolean shouldRenderComponents() {

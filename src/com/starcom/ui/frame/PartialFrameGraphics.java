@@ -6,10 +6,10 @@ import com.starcom.ui.model.Point;
 
 import java.io.InputStream;
 
-public class PartialFrameRenderer implements IFrameRenderer
+public class PartialFrameGraphics implements IFrameGraphics
 {
-  IFrameRenderer parent;
-  PartialFrameRenderer child;
+  IFrameGraphics parent;
+  PartialFrameGraphics child;
   Rect visibleRect;
   Rect tmpRect1 = new Rect(0,0,0,0);
   Rect tmpRect2 = new Rect(0,0,0,0);
@@ -18,24 +18,24 @@ public class PartialFrameRenderer implements IFrameRenderer
   Point tmpPoint3 = new Point();
 
   /** Must be updated via set(p,v) */
-  public PartialFrameRenderer() {}
+  public PartialFrameGraphics() {}
   
-  public void set(IFrameRenderer parent, Rect visibleRect)
+  public void set(IFrameGraphics parent, Rect visibleRect)
   {
     this.parent = parent;
     this.visibleRect = visibleRect;
-    if (parent instanceof PartialFrameRenderer)
+    if (parent instanceof PartialFrameGraphics)
     {
-      ((PartialFrameRenderer)parent).child = this;
+      ((PartialFrameGraphics)parent).child = this;
     }
   }
 
   public void dispose()
   {
     child.parent = parent;
-    if (parent instanceof PartialFrameRenderer)
+    if (parent instanceof PartialFrameGraphics)
     {
-      ((PartialFrameRenderer)parent).child = child;
+      ((PartialFrameGraphics)parent).child = child;
     }
   }
 

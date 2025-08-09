@@ -50,7 +50,7 @@ public class App {
     {
         try
         {
-            Button b = new Button(FrameFactory.getFrame().getRendererImpl().loadImage(new FileInputStream(new java.io.File("/path/img.png"))));
+            Button b = new Button(FrameFactory.getFrame().getGraphicsImpl().loadImage(new FileInputStream(new java.io.File("/path/img.png"))));
             b.getSize().x = 300;
             b.getSize().y = 150;
             b.getPos().x = 30;

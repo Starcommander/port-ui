@@ -16,7 +16,7 @@ import java.awt.event.MouseAdapter;
 
 import com.starcom.ui.components.SimpleContainer;
 import com.starcom.ui.frame.IFrame;
-import com.starcom.ui.frame.IFrameRenderer;
+import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Action;
 import com.starcom.ui.model.Color;
@@ -26,7 +26,7 @@ public class SwingFrame implements IFrame
 {
     JFrame jframe = new JFrame();
     SimpleContainer content = new SimpleContainer();
-    SwingFrameRenderer renderer;
+    SwingFrameGraphics graphics;
     public SwingFrame()
     {
         jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -36,13 +36,14 @@ public class SwingFrame implements IFrame
         jframe.getContentPane().addMouseListener(genMouseListener());
         jframe.getContentPane().addMouseWheelListener(genMouseListener());
         jframe.getContentPane().addMouseMotionListener(genMouseListener());
-        renderer = new SwingFrameRenderer(this);
+        graphics = new SwingFrameGraphics(this);
 
         Point p = getMaxSize();
         jframe.setSize(p.x,p.y);
         jframe.setLocation(0,0);
     }
 
+    /** A JPanel that implements the render function. */
     private java.awt.Container genContentPane()
     {
         JPanel p = new JPanel()
@@ -50,15 +51,15 @@ public class SwingFrame implements IFrame
             @Override public void paintComponent(Graphics g)
             {
                 if (getContent().shouldRender()) { super.paintComponent(g); }
-                SwingFrameRenderer.preRender(g);
+                SwingFrameGraphics.preRender(g);
                 getContent().layout();
                 if (getContent().shouldRender())
                 {
                     Color c = new Color(255, 255, 255, 255);
-                    renderer.drawFilledRect(c, SwingFrame.this.getSize().x, SwingFrame.this.getSize().y, 0, 0);
-                    SwingFrame.this.getContent().render(SwingFrame.this,getRendererImpl(),0,0);
+                    graphics.drawFilledRect(c, SwingFrame.this.getSize().x, SwingFrame.this.getSize().y, 0, 0);
+                    getContent().getRenderer().render(getContent(), graphics, 0,0);
                 }
-                SwingFrameRenderer.postRender();
+                SwingFrameGraphics.postRender();
             }
         };
         p.setLayout(jframe.getContentPane().getLayout());
@@ -128,25 +129,25 @@ public class SwingFrame implements IFrame
 
             @Override
             public void componentMoved(ComponentEvent e) {
-                content.setShouldRender();
+                content.setShouldRender(true);
             }
 
             @Override
             public void componentResized(ComponentEvent e) {
-                content.setShouldRender();
+                content.setShouldRender(true);
             }
 
             @Override
             public void componentShown(ComponentEvent e) {
-                content.setShouldRender();
+                content.setShouldRender(true);
             }
             
         };
     }
 
     @Override
-    public IFrameRenderer getRendererImpl() {
-        return renderer;
+    public IFrameGraphics getGraphicsImpl() {
+        return graphics;
     }
 
     @Override
@@ -183,10 +184,12 @@ public class SwingFrame implements IFrame
         SwingUtilities.invokeLater(() -> jframe.setVisible(b));
         if (b)
         {
+            // Must be called later, otherwise first render renders nothing.
             SwingUtilities.invokeLater(() -> new Thread(() -> loopThread()).start());
         }
     }
 
+    /** The render loop. */
     private void loopThread()
     {
         while (true)
@@ -198,6 +201,7 @@ public class SwingFrame implements IFrame
             }
 
             getContent().layout();
+            // This repaint() executes paintComponent of contentPane, see also genContentPane().
             jframe.getContentPane().repaint();
             try {
                 Thread.sleep(100);
