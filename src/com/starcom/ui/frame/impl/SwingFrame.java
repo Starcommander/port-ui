@@ -32,7 +32,7 @@ public class SwingFrame implements IFrame
         jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jframe.setContentPane(genContentPane());
         jframe.getContentPane().addComponentListener(genComponentListener());
-//        jframe.getContentPane().addKeyListener(genKeyListener()); //TODO: Add this
+        jframe.getContentPane().addKeyListener(genKeyListener());
         jframe.getContentPane().addMouseListener(genMouseListener());
         renderer = new SwingFrameRenderer(this);
 
@@ -97,20 +97,20 @@ public class SwingFrame implements IFrame
 
             @Override
             public void keyPressed(KeyEvent e) {
+                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.KeyPressed, 0, 0, KeyEvent.getKeyText(e.getKeyCode())),0,0));
                 // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
+                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.KeyReleased, 0, 0, KeyEvent.getKeyText(e.getKeyCode())),0,0));
                 // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
             }
 
             @Override
             public void keyTyped(KeyEvent e) {
+                SwingUtilities.invokeLater(() -> content.onAction(new Action(Action.AType.KeyTyped, 0, 0, KeyEvent.getKeyText(e.getKeyCode())),0,0));
                 // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
             }};
     }
 
