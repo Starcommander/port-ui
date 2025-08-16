@@ -1,6 +1,7 @@
 package com.starcom.ui.frame;
 
 import com.starcom.ui.model.Color;
+import com.starcom.ui.model.Rect;
 
 import java.io.InputStream;
 
@@ -19,5 +20,8 @@ public interface IFrameRenderer
 //  public void drawFilledEllipse(Color color, int x, int y, int w, int h);
   public void drawLine(Color color, int th, int x1, int y1, int x2, int y2);
   public void drawImage(Image img, int x, int y);
+  /** Draws only content of visible rect of an image.
+    * @param visibleRect The coordinates of image to be drawn. */
+  public void drawPartialImage(Image img, int x, int y, Rect visibleRect);
   public Image loadImage(InputStream s);
 }

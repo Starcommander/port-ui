@@ -10,4 +10,11 @@ public class Point
     this.x = x;
     this.y = y;
   }
+
+  public boolean equals(Point other)
+  {
+    if (x != other.x) { return false; }
+    if (y != other.y) { return false; }
+    return true;
+  }
 }

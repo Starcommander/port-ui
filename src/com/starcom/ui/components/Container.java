@@ -3,21 +3,18 @@ package com.starcom.ui.components;
 import java.util.ArrayList;
 
 import com.starcom.ui.frame.IFrame;
+import com.starcom.ui.frame.IFrameRenderer;
 import com.starcom.ui.model.Action;
 
 public abstract class Container extends Component
 {
   ArrayList<Component> components = new ArrayList<>();
 
-  public boolean onAction(Action action) //For components: Click, Touch/DnD, Key
-  {
-//TODO: Iterate components, return true if consumed
-    return false;
-  }
   public void layout()
   {
 //TODO: Layout all components
   }
+
   protected void renderComponents(IFrame frame)
   {
     for (Component c : components)
@@ -43,4 +40,8 @@ public abstract class Container extends Component
     //TODO
   }
 
+  /** Returns an IFrameRenderer for use in all containing components to render.
+    * That may be a wrapper over raw IFrameRenderer of IFrame, but shifts x and y coordinates, or clips some area.
+    * @return A wrapper, or IFrameRenderer of IFrame. */
+  public abstract IFrameRenderer getInternalRenderer();
 }

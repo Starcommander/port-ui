@@ -1,10 +1,11 @@
 package com.starcom.ui.components;
 
 import com.starcom.ui.frame.IFrame;
+import com.starcom.ui.frame.IFrameRenderer;
+import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.model.Action;
 
 public class SimpleContainer extends Container {
-
     @Override
     public void render(IFrame frame) {
         renderComponents(frame);
@@ -34,5 +35,11 @@ public class SimpleContainer extends Container {
             if (c.onAction(action, getPos().x + xShift, getPos().y + yShift)) { return true; }
         }
         return false;
+    }
+
+    @Override
+    public IFrameRenderer getInternalRenderer()
+    {
+      return FrameFactory.getFrame().getRenderer();
     }
 }

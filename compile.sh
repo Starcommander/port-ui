@@ -2,5 +2,6 @@
 
 mkdir -p build
 rm -rf build/com
-find src -name "*.java" -exec javac -sourcepath src/ -d build/ '{}' \;
+#find src -name "*.java" -exec javac -sourcepath src/ -d build/ '{}' \;
 #javac -sourcepath src/ -d build/ src/com/starcom/App.java
+find src -name "*.java" | xargs javac -sourcepath src/ -d build/

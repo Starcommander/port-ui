@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import com.starcom.ui.frame.Font;
 import com.starcom.ui.frame.IFrameRenderer;
 import com.starcom.ui.frame.Image;
+import com.starcom.ui.model.Rect;
 
 public class SwingFrameRenderer implements IFrameRenderer
 {
@@ -59,6 +60,20 @@ public class SwingFrameRenderer implements IFrameRenderer
     public void drawImage(Image img, int x, int y) {
         SwingImage sImage = (SwingImage)img;
         gr.drawImage(sImage.parent, x, y, TRANSP_COLOR, null);
+    }
+
+    @Override
+    public void drawPartialImage(Image img, int x, int y, Rect visibleRect)
+    {
+      Image tmpImg = img.getScaledInstance(img.getSize());
+      Graphics imgGraph = ((SwingImage)tmpImg).parent.createGraphics();
+      imgGraph.setColor(TRANSP_COLOR);
+      if (visibleRect.pos.x != 0) { imgGraph.fillRect(0,0,visibleRect.pos.x, img.getSize().y); }
+      if (visibleRect.pos.y != 0) { imgGraph.fillRect(0,0,img.getSize().x, visibleRect.pos.y); }
+      if ((visibleRect.pos.x+visibleRect.size.x) < img.getSize().x) { imgGraph.fillRect(visibleRect.pos.x+visibleRect.size.x,0,img.getSize().x, img.getSize().y); }
+      if ((visibleRect.pos.y+visibleRect.size.y) < img.getSize().x) { imgGraph.fillRect(0,visibleRect.pos.y+visibleRect.size.y,img.getSize().x, img.getSize().y); }
+      imgGraph.dispose();
+      drawImage(tmpImg, x, y);
     }
 
     @Override
