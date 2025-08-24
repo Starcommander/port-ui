@@ -52,7 +52,8 @@ public class SwingFrame implements IFrame
             {
                 if (getContent().shouldRender()) { super.paintComponent(g); }
                 SwingFrameGraphics.preRender(g);
-                getContent().layout();
+                getContent().getLayoutManager().doLayout(getContent());
+                getContent().getLayoutManager().doLayoutSub(getContent());
                 if (getContent().shouldRender())
                 {
                     Color c = new Color(255, 255, 255, 255);
@@ -200,7 +201,6 @@ public class SwingFrame implements IFrame
                 break;
             }
 
-            getContent().layout();
             // This repaint() executes paintComponent of contentPane, see also genContentPane().
             jframe.getContentPane().repaint();
             try {

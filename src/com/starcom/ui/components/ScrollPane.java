@@ -48,16 +48,15 @@ public class ScrollPane extends Container
       c.getVisibleRect().set(c.getPos().x, c.getPos().y, c.getSize().x, c.getSize().y);
       c.getInternalGraphics().set(frameGraphics, c.getVisibleRect());
       Container.renderComponents(c, c.getInternalGraphics(), xShift - c.getScrollPos().x, yShift - c.getScrollPos().y);
-
       frameGraphics.drawRect(Color.BLUE, 1, c.getPos().x + xShift, c.getPos().y + yShift, c.getSize().x, c.getSize().y);
-      Point componentsSize = c.getComponentsSize();
-      float ratioY = c.getRatioY(componentsSize);
+
+      float ratioY = c.getRatioY();
       if (ratioY > 1)
       { // Draw vertical scrollbar
         float scrollbarSize = 1/ratioY;
         scrollbarSize = ((float)c.getSize().y) * scrollbarSize;
         frameGraphics.drawRect(Color.GRAY, 1, c.getPos().x + xShift + c.getSize().x - 30, c.getPos().y + yShift, 30, c.getSize().y);
-        c.getInternalGraphics().drawFilledRect(Color.GRAY, c.getPos().x + xShift + c.getSize().x - 30, c.getPos().y + yShift + c.scrollPos.y, 30, (int)scrollbarSize);
+        c.getInternalGraphics().drawFilledRect(Color.GRAY, c.getPos().x + xShift + c.getSize().x - 30, c.getPos().y + yShift + (int)(((float)c.scrollPos.y) / ratioY), 30, (int)scrollbarSize);
       }
       c.setShouldRender(false);
     }
@@ -75,7 +74,7 @@ public class ScrollPane extends Container
       return csize;
     }
 
-    float getRatioY(Point componentsSize)
+    float getRatioY()
     {
       return ((float)getComponentsSize().y) / ((float)getSize().y);
     }

@@ -3,6 +3,7 @@ package com.starcom.ui.components;
 import java.util.Properties;
 
 import com.starcom.ui.frame.IActionListener;
+import com.starcom.ui.layout.ILayoutManager.ILayoutConf;
 import com.starcom.ui.model.Action;
 import com.starcom.ui.model.Point;
 import com.starcom.ui.render.IRenderer;
@@ -14,6 +15,7 @@ public abstract class Component
   Point location = new Point();
   Properties properties = new Properties();
   Container parent;
+  ILayoutConf layoutConf;
   IActionListener al;
 
   /** Sets the IActionListener that can be used by implementing class. */
@@ -53,4 +55,6 @@ public abstract class Component
   public abstract boolean onAction(Action action, int xShift, int yShift);
   public Point getSize() { return size; }
   public Point getPos() { return location; }
+  public ILayoutConf getLayoutConf() { return layoutConf; }
+  public void setLayoutConf(ILayoutConf layoutConf) { this.layoutConf = layoutConf; }
 }

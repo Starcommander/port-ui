@@ -3,16 +3,16 @@ package com.starcom.ui.components;
 import java.util.ArrayList;
 
 import com.starcom.ui.frame.IFrameGraphics;
+import com.starcom.ui.layout.ILayoutManager;
+import com.starcom.ui.layout.NullLayout;
+import com.starcom.ui.layout.ILayoutManager.ILayoutConf;
 import com.starcom.ui.model.Action;
 
 public abstract class Container extends Component
 {
   ArrayList<Component> components = new ArrayList<>();
+  ILayoutManager layoutManager = new NullLayout();
 
-  public void layout()
-  {
-//TODO: Layout all components
-  }
   public static void renderComponents(Container c, IFrameGraphics frameGraphics, int xShift, int yShift)
   {
     for (Component child : c.components)
@@ -39,21 +39,32 @@ public abstract class Container extends Component
   {
     //TODO: on action execute it on component
   }
-  public void addComponent(Component c)
+
+  /** Adds the component.
+   * @param c The component to add.
+   * @param layoutConf The layoutConf that belongs to current LayoutManager, may be null if LayoutManager is NullLayout.
+   */
+  public void addComponent(Component c, ILayoutConf layoutConf)
   {
     if (c.getParent() != null) { throw new IllegalStateException("Component already inserted into other container."); }
     if (c == this) { throw new IllegalStateException("Cannot insert same container into itshelf."); }
+    layoutManager.checkLayoutConf(layoutConf);
+
     components.add(c);
+    c.setLayoutConf(layoutConf);
     c.setParent(this);
   }
-  public boolean clearComponent(Component c)
+  public boolean removeComponent(Component c)
   {
-    return components.remove(c);
+    boolean has = components.remove(c);
+    if (has) { c.parent = null; }
+    return has;
   }
   public ArrayList<Component> getComponents() { return components; }
-  public void setLayoutManager(String todo)
+  public void setLayoutManager(ILayoutManager layoutManager)
   {
-    //TODO
+    this.layoutManager = layoutManager;
   }
+  public ILayoutManager getLayoutManager() { return layoutManager; }
 
 }
