@@ -50,16 +50,15 @@ public class SwingFrame implements IFrame
         {
             @Override public void paintComponent(Graphics g)
             {
-                if (getContent().shouldRender()) { super.paintComponent(g); }
+                if (!getContent().shouldRender()) { return; }
+                super.paintComponent(g);
                 SwingFrameGraphics.preRender(g);
+                getContent().getSize().set(SwingFrame.this.getSize().x, SwingFrame.this.getSize().y);
                 getContent().getLayoutManager().doLayout(getContent());
                 getContent().getLayoutManager().doLayoutSub(getContent());
-                if (getContent().shouldRender())
-                {
-                    Color c = new Color(255, 255, 255, 255);
-                    graphics.drawFilledRect(c, SwingFrame.this.getSize().x, SwingFrame.this.getSize().y, 0, 0);
-                    getContent().getRenderer().render(getContent(), graphics, 0,0);
-                }
+                Color c = new Color(255, 255, 255, 255);
+                graphics.drawFilledRect(c, SwingFrame.this.getSize().x, SwingFrame.this.getSize().y, 0, 0);
+                getContent().getRenderer().render(getContent(), graphics, 0,0);
                 SwingFrameGraphics.postRender();
             }
         };
@@ -164,7 +163,7 @@ public class SwingFrame implements IFrame
 
     @Override
     public Point getSize() {
-        return new Point(jframe.getWidth(), jframe.getHeight());
+        return new Point(jframe.getContentPane().getWidth(), jframe.getContentPane().getHeight());
     }
 
     @Override

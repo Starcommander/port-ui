@@ -29,6 +29,10 @@ public abstract class Component
     if (y < getPos().y) { return false; }
     if (x > (getPos().x + getSize().x)) { return false; }
     if (y > (getPos().y + getSize().y)) { return false; }
+    if (parent != null)
+    { // Check, is this component visible on container
+      return parent.intersect(x, y);
+    }
     return true;
   }
   public IRenderer getRenderer()

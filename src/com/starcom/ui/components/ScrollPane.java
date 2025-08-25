@@ -25,6 +25,12 @@ public class ScrollPane extends Container
     public Rect getVisibleRect() { return visibleRect; }
 
     @Override
+    public boolean intersect(int x, int y)
+    { // Used onAction of components.
+      return super.intersect(x - scrollPos.x, y - scrollPos.y);
+    }
+
+    @Override
     public boolean shouldRender() {
       return shouldRenderScrollpane || shouldRenderComponents();
     }
@@ -96,8 +102,8 @@ public class ScrollPane extends Container
       }
       boolean consumed = onActionComponents(action, xShift + scrollPos.x, yShift + scrollPos.y);
       if (consumed) { return true; }
-      if (action.type == AType.MouseScrolled)
-      { //TODO: Check only for scroll actions that are inside
+      if (action.type == AType.MouseScrolled && super.intersect(action.x + xShift, action.y + yShift))
+      {
         doScroll(0, action.value);
         return true;
       }

@@ -6,6 +6,8 @@ import com.starcom.ui.components.ScrollPane;
 import com.starcom.ui.components.ext.simple.Button;
 import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.IFrame;
+import com.starcom.ui.layout.RelativeLayout;
+import com.starcom.ui.layout.RelativeLayout.RelativeLayoutConf;
 import com.starcom.ui.layout.VBox;
 import com.starcom.ui.layout.VBox.VBoxConf;
 
@@ -16,7 +18,8 @@ public class App {
         frame.setTitle("The portable GUI");
         //addSimpleButton(frame);
         //addScrollPaneButton(frame);
-        addScrollPaneButtons(frame);
+        //addScrollPaneButtons(frame);
+        addScrollPaneRelativeButtons(frame);
 
         frame.setVisible(true);
     }
@@ -29,6 +32,17 @@ public class App {
         b.getSize().x = 800;
         sp.addComponent(b, null);
         frame.getContent().addComponent(sp, null);
+    }
+
+    static void addScrollPaneRelativeButtons(IFrame frame)
+    {
+        ScrollPane sp = genScrollPane();
+        sp.setLayoutManager(new VBox());
+        frame.getContent().setLayoutManager(new RelativeLayout());
+        for (int i=0; i<50; i++)
+            sp.addComponent(genSimpleButton(), new VBoxConf(30));
+        frame.getContent().addComponent(sp, new RelativeLayoutConf(0f,0f,1f,0.8f));
+        frame.getContent().addComponent(genSimpleButton(), new RelativeLayoutConf(0f,0.8f,1f,0.2f));
     }
 
     static void addScrollPaneButtons(IFrame frame)
