@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 
 import com.starcom.ui.components.ScrollPane;
 import com.starcom.ui.components.ext.simple.Button;
+import com.starcom.ui.components.ext.simple.DropDown;
 import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.IFrame;
 import com.starcom.ui.layout.RelativeLayout;
@@ -19,9 +20,19 @@ public class App {
         //addSimpleButton(frame);
         //addScrollPaneButton(frame);
         //addScrollPaneButtons(frame);
-        addScrollPaneRelativeButtons(frame);
+        //addScrollPaneRelativeButtons(frame);
+        addDropDown(frame);
 
         frame.setVisible(true);
+    }
+
+    private static void addDropDown(IFrame frame) {
+        DropDown d = new DropDown((s) -> System.out.println("Submenu: " + s), "One", "Two", "Three");
+        d.getSize().x = 90;
+        d.getSize().y = 60;
+        d.getPos().x = 30;
+        d.getPos().y = 30;
+        frame.getContent().addComponent(d, null);
     }
 
     static void addScrollPaneButton(IFrame frame)

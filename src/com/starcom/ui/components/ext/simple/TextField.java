@@ -54,4 +54,9 @@ public class TextField extends Component {
         g.drawImage(i, c.getPos().x + xShift, c.getPos().y + yShift);
         c.setShouldRender(false);
     }
+
+    @Override
+    public boolean intersect(int x, int y) {
+        return Component.intersectComponent(this, x, y);
+    }
 }

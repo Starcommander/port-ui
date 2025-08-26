@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 public class Button extends Label {
 
     static Logger logger = java.util.logging.Logger.getLogger(Button.class.getName());
-    Color buttonDownColor = new Color(150, 150, 150, 255);
+    Color buttonDownColor = Color.GRAY_BRIGHT;
     Color buttonBgColor;
     boolean buttonDown;
 

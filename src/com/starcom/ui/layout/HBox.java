@@ -16,7 +16,7 @@ public class HBox implements ILayoutManager{
         float scale = 1.0f;
         if (fullX > minX)
         {
-            scale = fullX/minX;
+            scale = (float)fullX/(float)minX;
         }
         float curX = 0;
         for (Component comp : c.getComponents())

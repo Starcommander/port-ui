@@ -22,19 +22,27 @@ public abstract class Component
   public void setActionListener(IActionListener al) { this.al = al; }
   public IActionListener getActionListener() { return al; }
 
-  /** @return true, if coordinate is inside of this component. */
-  public boolean intersect(int x, int y)
+  /** Checks if coordinate intersects this component, used for action handling.
+   * @param x The x coordinate, often action.x + xShift.
+   * @param y The y coordinate, often action.y + yShift.
+   * @return true, if coordinate is inside of this component.
+   * @see Component.intersectComponent */
+  public abstract boolean intersect(int x, int y);
+
+  /** The default intersect function used by components. */
+  public static boolean intersectComponent(Component c, int x, int y)
   {
-    if (x < getPos().x) { return false; }
-    if (y < getPos().y) { return false; }
-    if (x > (getPos().x + getSize().x)) { return false; }
-    if (y > (getPos().y + getSize().y)) { return false; }
-    if (parent != null)
+    if (x < c.getPos().x) { return false; }
+    if (y < c.getPos().y) { return false; }
+    if (x > (c.getPos().x + c.getSize().x)) { return false; }
+    if (y > (c.getPos().y + c.getSize().y)) { return false; }
+    if (c.getParent() != null)
     { // Check, is this component visible on container
-      return parent.intersect(x, y);
+      return c.getParent().intersect(x, y);
     }
     return true;
   }
+
   public IRenderer getRenderer()
   {
     IRenderer r = RenderSystem.get().get(this.getClass());

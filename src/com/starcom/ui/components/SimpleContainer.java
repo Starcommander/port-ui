@@ -1,15 +1,19 @@
 package com.starcom.ui.components;
 
+import com.starcom.ui.components.ext.simple.ContextMenu;
 import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.model.Action;
 import com.starcom.ui.render.IRenderer;
 
 public class SimpleContainer extends Container {
-    boolean shouldRender = false; //SimpleContainer itshelf has nothing do draw
+    boolean shouldRender = true;
+    ContextMenu menu;
 
     @Override
     public boolean shouldRender() {
-        return shouldRenderComponents() || shouldRender;
+        if (shouldRender) { return true; }
+        if (menu != null && menu.shouldRender()) { return true; }
+        return shouldRenderComponents();
     }
 
     @Override
@@ -19,17 +23,50 @@ public class SimpleContainer extends Container {
 
     @Override
     public boolean onAction(Action action, int xShift, int yShift) {
-        return onActionComponents(action, xShift, yShift);
+        return onActionMenu(action, xShift, yShift) || onActionComponents(action, xShift, yShift);
     }
 
     @Override
     public IRenderer getFallbackRenderer() {
-        return (c,g,x,y) -> render((Container)c,g,x,y);
+        return (c,g,x,y) -> render((SimpleContainer)c,g,x,y);
     }
 
-    private static void render(Container c, IFrameGraphics g, int xShift, int yShift)
+    private static void render(SimpleContainer c, IFrameGraphics g, int xShift, int yShift)
     {
         Container.renderComponents(c, g, xShift, yShift);
+        renderContextMenu(c.menu, g, xShift, yShift);
         c.setShouldRender(false);
+    }
+
+    @Override
+    public boolean intersect(int x, int y)
+    { // Always true on this root-container.
+        return true;
+    }
+
+    public void setContextMenu(ContextMenu menu)
+    {
+        if (this.menu != null)
+        {
+            this.menu.setParent(null);
+        }
+        if (menu != null)
+        {
+            menu.setParent(this);
+        }
+        this.menu = menu;
+    }
+    
+    private boolean onActionMenu(Action action, int xShift, int yShift)
+    {
+        if (menu == null) { return false; }
+        return menu.onAction(action, xShift, yShift);
+    }
+
+    private static void renderContextMenu(ContextMenu menu, IFrameGraphics g, int xShift, int yShift) {
+        if (menu == null) { return; }
+        menu.getLayoutManager().doLayout(menu);
+        menu.getLayoutManager().doLayoutSub(menu);
+        menu.getFallbackRenderer().render(menu, g, xShift, yShift);
     }
 }

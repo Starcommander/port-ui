@@ -16,7 +16,7 @@ public class VBox implements ILayoutManager{
         float scale = 1.0f;
         if (fullY > minY)
         {
-            scale = fullY/minY;
+            scale = (float)fullY/(float)minY;
         }
         float curY = 0;
         for (Component comp : c.getComponents())

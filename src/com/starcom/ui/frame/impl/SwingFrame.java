@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.logging.Logger;
 import java.awt.event.MouseAdapter;
 
 import com.starcom.ui.components.SimpleContainer;
@@ -24,6 +25,7 @@ import com.starcom.ui.model.Point;
 
 public class SwingFrame implements IFrame
 {
+    static Logger logger = java.util.logging.Logger.getLogger(SwingFrame.class.getName());
     JFrame jframe = new JFrame();
     SimpleContainer content = new SimpleContainer();
     SwingFrameGraphics graphics;
@@ -196,7 +198,7 @@ public class SwingFrame implements IFrame
         {
             if (!jframe.isVisible())
             {
-                System.out.println("Stop render as jframe not visible"); //TODO: Use a logger
+                logger.info("Stop render as jframe not visible");
                 break;
             }
 

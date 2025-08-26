@@ -2,6 +2,7 @@ package com.starcom.ui.components.ext.simple;
 
 import com.starcom.ui.components.Component;
 import com.starcom.ui.frame.Font;
+import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Action;
@@ -12,6 +13,7 @@ import java.util.logging.Logger;
 
 public class Label extends Component {
     String title;
+    Font font;
     Image image;
     Color backgroundColor; // May be null
     String trimmedTitle;
@@ -22,6 +24,7 @@ public class Label extends Component {
     public Label(String title)
     {
         this.title = title;
+        initFont();
     }
 
     public Label(Image image)
@@ -29,9 +32,16 @@ public class Label extends Component {
         this.image = image;
     }
 
+    private void initFont()
+    {
+        if (font != null) { return; }
+        font = FrameFactory.getFrame().getGraphicsImpl().newFont();
+    }
+
     public void setText(String title)
     {
         this.title = title;
+        initFont();
         setShouldRender(true);
     }
     public String getText() { return title; }
@@ -42,6 +52,8 @@ public class Label extends Component {
         setShouldRender(true);
     }
     public Image getImage() { return image; }
+    /** Returns the font in case a text is set, otherwise null. */
+    public Font getFont() { return font; }
 
     public Color getBackgroundColor() { return backgroundColor; }
     public void setBackgroundColor(Color backgroundColor)
@@ -65,17 +77,15 @@ public class Label extends Component {
         {
             frameGraphics.drawFilledRect(l.getBackgroundColor(), l.getPos().x + xShift, l.getPos().y + yShift, l.getSize().x, l.getSize().y);
         }
-        renderText(l, l.title, frameGraphics, xShift, yShift);
+        renderText(l, l.getFont(), l.title, frameGraphics, xShift, yShift);
         renderImage(l, l.image, frameGraphics, xShift, yShift);
         c.setShouldRender(false);
     }
 
     /** Draws the Text into center of component, and trimms the text if necessary. */ 
-    public static void renderText(Component c, String title, IFrameGraphics frameGraphics, int xShift, int yShift)
+    public static void renderText(Component c, Font f, String title, IFrameGraphics frameGraphics, int xShift, int yShift)
     {
         if (title == null) { return; }
-        Font f = frameGraphics.newFont();
-        f.setSize(16);
         Color col = new Color(0, 0, 255, 255);
         Image fImg;
         Integer trimmedWidth = (Integer)c.getProperties().get(Button.class + ".TrimTextWidth");
@@ -84,7 +94,7 @@ public class Label extends Component {
         {
             fImg = f.genTextImage(trimmedTitle, col);
         }
-        else if (c.getSize().x > f.calcTextSize(title).x)
+        else if (c.getSize().x >= f.calcTextSize(title).x)
         {
             fImg = f.genTextImage(title, col);
         }
@@ -136,5 +146,10 @@ public class Label extends Component {
     @Override
     public boolean onAction(Action action, int xShift, int yShift) {
         return false;
+    }
+
+    @Override
+    public boolean intersect(int x, int y) {
+        return Component.intersectComponent(this, x, y);
     }
 }

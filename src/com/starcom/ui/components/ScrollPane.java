@@ -27,7 +27,7 @@ public class ScrollPane extends Container
     @Override
     public boolean intersect(int x, int y)
     { // Used onAction of components.
-      return super.intersect(x - scrollPos.x, y - scrollPos.y);
+      return Component.intersectComponent(this, x - scrollPos.x, y - scrollPos.y);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ScrollPane extends Container
     }
 
     public static void render(ScrollPane c, IFrameGraphics frameGraphics, int xShift, int yShift) {
-      c.getVisibleRect().set(c.getPos().x, c.getPos().y, c.getSize().x, c.getSize().y);
+      c.getVisibleRect().set(c.getPos().x + xShift, c.getPos().y + yShift, c.getSize().x, c.getSize().y);
       c.getInternalGraphics().set(frameGraphics, c.getVisibleRect());
       Container.renderComponents(c, c.getInternalGraphics(), xShift - c.getScrollPos().x, yShift - c.getScrollPos().y);
       frameGraphics.drawRect(Color.BLUE, 1, c.getPos().x + xShift, c.getPos().y + yShift, c.getSize().x, c.getSize().y);
@@ -62,7 +62,7 @@ public class ScrollPane extends Container
         float scrollbarSize = 1/ratioY;
         scrollbarSize = ((float)c.getSize().y) * scrollbarSize;
         frameGraphics.drawRect(Color.GRAY, 1, c.getPos().x + xShift + c.getSize().x - 30, c.getPos().y + yShift, 30, c.getSize().y);
-        c.getInternalGraphics().drawFilledRect(Color.GRAY, c.getPos().x + xShift + c.getSize().x - 30, c.getPos().y + yShift + (int)(((float)c.scrollPos.y) / ratioY), 30, (int)scrollbarSize);
+        c.getInternalGraphics().drawFilledRect(new Color(50, 50, 50, 150), c.getPos().x + xShift + c.getSize().x - 30, c.getPos().y + yShift + (int)(((float)c.scrollPos.y) / ratioY), 30, (int)scrollbarSize);
       }
       c.setShouldRender(false);
     }
@@ -102,7 +102,7 @@ public class ScrollPane extends Container
       }
       boolean consumed = onActionComponents(action, xShift + scrollPos.x, yShift + scrollPos.y);
       if (consumed) { return true; }
-      if (action.type == AType.MouseScrolled && super.intersect(action.x + xShift, action.y + yShift))
+      if (action.type == AType.MouseScrolled && Component.intersectComponent(this, action.x + xShift, action.y + yShift))
       {
         doScroll(0, action.value);
         return true;

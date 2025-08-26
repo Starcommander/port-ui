@@ -7,7 +7,7 @@ public abstract class Font
 {
   public enum Style {Plain, Bolt, Italic};
 
-  int size;
+  int size = 16;
   String fontFamily = getFonts()[0];
   Style style = Style.Plain;
 

@@ -13,6 +13,12 @@ public abstract class Container extends Component
   ArrayList<Component> components = new ArrayList<>();
   ILayoutManager layoutManager = new NullLayout();
 
+  /**
+   * Renders the containing components.
+   * @param c The container of which to render his components.
+   * @param frameGraphics The graphics.
+   * @param xShift The xShift got from render function (do not add pos.x)
+   * @param yShift The yShift got from render function (do not add pos.y) */
   public static void renderComponents(Container c, IFrameGraphics frameGraphics, int xShift, int yShift)
   {
     for (Component child : c.components)
