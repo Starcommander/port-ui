@@ -11,6 +11,8 @@ public class Button extends Label {
     Color buttonDownColor = Color.GRAY_BRIGHT;
     Color buttonBgColor;
     boolean buttonDown;
+    Image upImage;
+    Image downImage;
 
     public Button(String title)
     {
@@ -20,6 +22,13 @@ public class Button extends Label {
     public Button(Image image)
     {
         super(image);
+        upImage = image;
+    }
+
+    public void setDownImage(Image downImage)
+    {
+        if (image == null) { throw new IllegalStateException("DownImage does only make sense with Button(image) not with Button(text)"); }
+        this.downImage = downImage;
     }
 
     public boolean isButtonDown() { return buttonDown; }
@@ -46,6 +55,7 @@ public class Button extends Label {
         {
             buttonDown = false;
             super.setBackgroundColor(buttonBgColor);
+            if (image != null) { super.setImage(image); }
             return true;
         }
         if (!intersect(action.x + xShift, action.y + yShift)) { return false; }
@@ -53,6 +63,7 @@ public class Button extends Label {
         {
             buttonDown = true;
             super.setBackgroundColor(buttonDownColor);
+            if (downImage != null) { super.setImage(downImage); }
             return true;
         }
         if (action.type == Action.AType.MouseClicked)
