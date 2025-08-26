@@ -3,7 +3,7 @@ package com.starcom.ui.components.ext.simple;
 import com.starcom.ui.components.Component;
 import com.starcom.ui.components.Container;
 import com.starcom.ui.components.ScrollPane;
-import com.starcom.ui.components.SimpleContainer;
+import com.starcom.ui.components.RootContainer;
 import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.frame.ISelectedListener;
@@ -78,7 +78,7 @@ public class ContextMenu extends Container{
 
     public void hide()
     {
-        SimpleContainer c = (SimpleContainer)getParent();
+        RootContainer c = (RootContainer)getParent();
         c.setShouldRender(true);
         c.setContextMenu(null);
     }

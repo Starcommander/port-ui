@@ -15,7 +15,7 @@ import java.awt.event.MouseWheelEvent;
 import java.util.logging.Logger;
 import java.awt.event.MouseAdapter;
 
-import com.starcom.ui.components.SimpleContainer;
+import com.starcom.ui.components.RootContainer;
 import com.starcom.ui.frame.IFrame;
 import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.frame.Image;
@@ -27,7 +27,7 @@ public class SwingFrame implements IFrame
 {
     static Logger logger = java.util.logging.Logger.getLogger(SwingFrame.class.getName());
     JFrame jframe = new JFrame();
-    SimpleContainer content = new SimpleContainer();
+    RootContainer content = new RootContainer();
     SwingFrameGraphics graphics;
     public SwingFrame()
     {
@@ -214,7 +214,7 @@ public class SwingFrame implements IFrame
     }
 
     @Override
-    public SimpleContainer getContent() {
+    public RootContainer getContent() {
         return content;
     }
 

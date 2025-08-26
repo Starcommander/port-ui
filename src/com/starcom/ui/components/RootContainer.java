@@ -5,7 +5,7 @@ import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.model.Action;
 import com.starcom.ui.render.IRenderer;
 
-public class SimpleContainer extends Container {
+public class RootContainer extends Container {
     boolean shouldRender = true;
     ContextMenu menu;
 
@@ -28,10 +28,10 @@ public class SimpleContainer extends Container {
 
     @Override
     public IRenderer getFallbackRenderer() {
-        return (c,g,x,y) -> render((SimpleContainer)c,g,x,y);
+        return (c,g,x,y) -> render((RootContainer)c,g,x,y);
     }
 
-    private static void render(SimpleContainer c, IFrameGraphics g, int xShift, int yShift)
+    private static void render(RootContainer c, IFrameGraphics g, int xShift, int yShift)
     {
         Container.renderComponents(c, g, xShift, yShift);
         renderContextMenu(c.menu, g, xShift, yShift);
