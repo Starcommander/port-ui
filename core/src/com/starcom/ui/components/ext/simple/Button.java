@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 public class Button extends Label {
 
     static Logger logger = java.util.logging.Logger.getLogger(Button.class.getName());
-    Color buttonDownColor = Color.GRAY_BRIGHT;
-    Color buttonBgColor;
+    Color bgColorDown = Color.GRAY_BRIGHT;
+    Color bgColor;
     boolean buttonDown;
     Image upImage;
     Image downImage;
@@ -32,15 +32,15 @@ public class Button extends Label {
     }
 
     public boolean isButtonDown() { return buttonDown; }
-    public void setButtonDownColor(Color buttonDownColor)
+    public void setBackgroundColorDown(Color bgColorDown)
     {
-        this.buttonDownColor = buttonDownColor;
+        this.bgColorDown = bgColorDown;
     }
 
     @Override
-    public void setBackgroundColor(Color buttonBgColor)
+    public void setBackgroundColor(Color bgColor)
     {
-        this.buttonBgColor = buttonBgColor;
+        this.bgColor = bgColor;
         setShouldRender(true);
     }
 
@@ -54,7 +54,7 @@ public class Button extends Label {
         if (action.type == Action.AType.MouseReleased && buttonDown)
         {
             buttonDown = false;
-            super.setBackgroundColor(buttonBgColor);
+            super.setBackgroundColor(bgColor);
             if (image != null) { super.setImage(image); }
             return true;
         }
@@ -62,7 +62,7 @@ public class Button extends Label {
         if (action.type == Action.AType.MousePressed)
         {
             buttonDown = true;
-            super.setBackgroundColor(buttonDownColor);
+            super.setBackgroundColor(bgColorDown);
             if (downImage != null) { super.setImage(downImage); }
             return true;
         }
