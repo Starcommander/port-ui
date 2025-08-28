@@ -4,9 +4,11 @@ import java.io.FileInputStream;
 
 import com.starcom.ui.components.ScrollPane;
 import com.starcom.ui.components.ext.simple.Button;
+import com.starcom.ui.components.ext.simple.TextField;
 import com.starcom.ui.components.ext.simple.DropDown;
 import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.IFrame;
+import com.starcom.ui.keyboard.SoftKeyboard;
 import com.starcom.ui.layout.RelativeLayout;
 import com.starcom.ui.layout.RelativeLayout.RelativeLayoutConf;
 import com.starcom.ui.layout.VBox;
@@ -21,9 +23,20 @@ public class App {
         //addScrollPaneButton(frame);
         //addScrollPaneButtons(frame);
         //addScrollPaneRelativeButtons(frame);
-        addDropDown(frame);
+        //addDropDown(frame);
+        addTextField(frame);
 
         frame.setVisible(true);
+    }
+
+    private static void addTextField(IFrame frame) {
+        TextField tf = new TextField("Initial Text");
+        tf.getSize().x = 300;
+        tf.getSize().y = 60;
+        tf.getPos().x = 30;
+        tf.getPos().y = 30;
+        frame.getContent().addComponent(tf, null);
+        FrameFactory.setKeyboard(new SoftKeyboard());
     }
 
     private static void addDropDown(IFrame frame) {

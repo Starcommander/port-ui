@@ -1,9 +1,13 @@
 package com.starcom.ui.frame;
 
+import com.starcom.ui.keyboard.HardKeyboard;
+import com.starcom.ui.keyboard.IKeyboard;
+
 public class FrameFactory
 {
   public static String FRAME_IMPL = "com.starcom.ui.frame.impl.FrameImpl";
   private static IFrame frameImpl;
+  static IKeyboard keyboard = new HardKeyboard();
 
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public static IFrame getFrame()
@@ -19,5 +23,16 @@ public class FrameFactory
       }
     }
     return frameImpl;
+  }
+
+  public static IKeyboard getKeyboard()
+  {
+    return keyboard;
+  }
+
+  public static void setKeyboard(IKeyboard newKeyboard)
+  {
+    if (newKeyboard == null) { throw new NullPointerException("Keyboard must not be null"); }
+    keyboard = newKeyboard;
   }
 }

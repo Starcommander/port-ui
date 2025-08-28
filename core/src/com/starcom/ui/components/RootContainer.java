@@ -1,8 +1,10 @@
 package com.starcom.ui.components;
 
 import com.starcom.ui.components.ext.simple.ContextMenu;
+import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.model.Action;
+import com.starcom.ui.model.Point;
 import com.starcom.ui.render.IRenderer;
 
 public class RootContainer extends Container {
@@ -42,6 +44,12 @@ public class RootContainer extends Container {
     public boolean intersect(int x, int y)
     { // Always true on this root-container.
         return true;
+    }
+
+    @Override
+    public Point getSize()
+    {
+        return new Point(FrameFactory.getFrame().getSize().x, FrameFactory.getFrame().getSize().y);
     }
 
     public void setContextMenu(ContextMenu menu)

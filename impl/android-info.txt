@@ -1,0 +1,2 @@
+For software keyboard see:
+- libgdx: libgdx-master/backends/gdx-backend-android/src/com/badlogic/gdx/backends/android/DefaultAndroidInput.java

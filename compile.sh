@@ -1,7 +1,9 @@
 #!/bin/bash
 
-mkdir -p build
-rm -rf build/com
-#find src -name "*.java" -exec javac -sourcepath src/ -d build/ '{}' \;
-#javac -sourcepath src/ -d build/ src/com/starcom/App.java
-find src -name "*.java" | xargs javac -sourcepath src/ -d build/
+cd core
+./build.sh
+mvn install
+cd -
+cd examples/swing
+./build.sh
+cd -

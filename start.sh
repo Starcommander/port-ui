@@ -1,2 +1,2 @@
-cd build
-java com.starcom.App
+cd examples/swing
+./start.sh

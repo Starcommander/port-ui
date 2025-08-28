@@ -9,6 +9,7 @@ import com.starcom.ui.model.Action;
 import com.starcom.ui.model.Color;
 import com.starcom.ui.render.IRenderer;
 
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 public class Label extends Component {
@@ -30,6 +31,14 @@ public class Label extends Component {
     public Label(Image image)
     {
         this.image = image;
+        getSize().x = image.getSize().x;
+        getSize().y = image.getSize().y;
+    }
+
+    public static Label fromResource(String resource)
+    {
+        InputStream s = Label.class.getResourceAsStream(resource);
+        return new Label(FrameFactory.getFrame().getGraphicsImpl().loadImage(s));
     }
 
     private void initFont()

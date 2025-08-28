@@ -2,6 +2,7 @@ package com.starcom.ui.components.ext.simple;
 
 import com.starcom.ui.components.Component;
 import com.starcom.ui.frame.Font;
+import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Action;
@@ -39,6 +40,29 @@ public class TextField extends Component {
 
     @Override
     public boolean onAction(Action action, int xShift, int yShift) {
+        if (action.type == Action.AType.MouseClicked)
+        {
+            if (intersect(action.x + xShift, action.y + yShift))
+            {
+                FrameFactory.getKeyboard().show(this);
+            }
+        }
+        //TODO: KeyEvents and MouseMark or cursor
+        if (action.type == Action.AType.KeyTyped)
+        {
+            //TODO: Only if intersect.
+            String newTitle = title;
+            if (action.value == '\b')
+            {
+                if (newTitle.length()==0) { return true; }
+                newTitle = newTitle.substring(0, newTitle.length()-1);
+            }
+            else
+            {
+                newTitle = title + (char)action.value;
+            }
+            setText(newTitle);
+        }
         return false;
     }
 
