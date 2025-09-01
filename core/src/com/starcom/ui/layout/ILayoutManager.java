@@ -20,5 +20,7 @@ public interface ILayoutManager {
      * @param layoutConf The conf to check.
      * @throws IllegalStateException If layoutConf is not the correct instance. */
     public void checkLayoutConf(ILayoutConf layoutConf) throws IllegalStateException; 
+    /** Sets the size of container matching all components. */
+    public void pack(Container main);
     public static interface ILayoutConf {}
 }

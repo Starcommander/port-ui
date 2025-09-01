@@ -42,4 +42,14 @@ public class HBox implements ILayoutManager{
         public HBoxConf(int minWidth) { this.minWidth = minWidth; }
     }
 
+    @Override
+    public void pack(Container main) {
+        int minX = 0;
+        for (Component comp : main.getComponents())
+        {
+            minX += ((HBoxConf)comp.getLayoutConf()).minWidth;
+        }
+        main.getSize().x = minX;
+    }
+
 }

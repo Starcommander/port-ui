@@ -19,5 +19,14 @@ public class SingleLayout implements ILayoutManager
     @Override
     public void checkLayoutConf(ILayoutConf layoutConf) throws IllegalStateException {
     }
+
+    @Override
+    public void pack(Container main) {
+        for (Component comp : main.getComponents())
+        {
+            main.getSize().set(comp.getSize().x, comp.getSize().y);
+            break;
+        }
+    }
     
 }

@@ -30,9 +30,7 @@ public class Label extends Component {
 
     public Label(Image image)
     {
-        this.image = image;
-        getSize().x = image.getSize().x;
-        getSize().y = image.getSize().y;
+        setImage(image);
     }
 
     public static Label fromResource(String resource)
@@ -58,6 +56,8 @@ public class Label extends Component {
     public void setImage(Image image)
     {
         this.image = image;
+        getSize().x = image.getSize().x;
+        getSize().y = image.getSize().y;
         setShouldRender(true);
     }
     public Image getImage() { return image; }

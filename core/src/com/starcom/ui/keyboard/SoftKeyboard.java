@@ -20,28 +20,14 @@ public class SoftKeyboard implements IKeyboard
   private static final String PIX_KEYB_DEF = "/keyb-def.png";
   private static final String PIX_KEYB_DEF_UP = "/keyb-def-up.png";
 
-  int lastX, lastY;
-  boolean skipIdenticalTouch = true;
-  boolean active = false;
-  String curKeyboard = PIX_KEYB_DEF;
   HashMap<String,ArrayList<KeyModel>> keyboards = new HashMap<>();
-  KeyboardView keyboardView = new KeyboardView(PIX_KEYB_DEF, this);
+  KeyboardView keyboardView = new KeyboardView(this);
   Component focusComponent;
 
   public SoftKeyboard()
   {
     keyboards.put(PIX_KEYB_DEF, createKeyList(false));
     keyboards.put(PIX_KEYB_DEF_UP, createKeyList(true));
-  }
-
-  /** Sets the keyboard active, and showing for textfields.
-   * @param active True to set active.
-   * @param skipIdenticalTouch For recognize and skip touch-release.
-   * <br>Useful on mobile devices, but not on desktop with mouse. */
-  public void setActive(boolean active, boolean skipIdenticalTouch)
-  {
-    this.active = active;
-    this.skipIdenticalTouch = skipIdenticalTouch;
   }
 
   /** *  List of keyboards.
@@ -52,39 +38,20 @@ public class SoftKeyboard implements IKeyboard
     return keyboards;
   }
 
-  /** Switching, using the SPECIAL_SWITCH_TO key. */
-  private void switchKeyboard(String imgFile)
-  {
-    curKeyboard = imgFile;
-    keyboardView.updateKeyboard(imgFile);
-  }
-
   @Override
   public void show(Component focusComponent)
   {
     this.focusComponent = focusComponent;
+    keyboardView.updateKeyboard(PIX_KEYB_DEF);
     FrameFactory.getFrame().getContent().setContextMenu(keyboardView.getMenu());
   }
 
-  // public void hide()
-  // {
-  //   if (!active) { return; }
-  //   GuiLoader.getInstance().getForm().remove(panel);
-  // }
-
   private static boolean onPressed(SoftKeyboard sk, int x, int y)
   {
-    if (sk.skipIdenticalTouch && sk.lastX == x && sk.lastY == y)
-    {
-      System.out.println("Skip-Touch-Release");
-      return true;
-    }
-    sk.lastX = x;
-    sk.lastY = y;
     x = (int)(sk.keyboardView.scalerX * x);
     y = (int)(sk.keyboardView.scalerY * y);
     System.out.println("SoftKeyboard.onPressed(" + x + "/" + y + ")");
-    for (KeyModel km : sk.keyboards.get(sk.curKeyboard))
+    for (KeyModel km : sk.keyboards.get(sk.keyboardView.getViewRes()))
     {
       if (km.x > x) { continue; }
       if (km.x+km.w < x) { continue; }
@@ -104,12 +71,13 @@ public class SoftKeyboard implements IKeyboard
         if (km.special.startsWith(SPECIAL_SWITCH_TO))
         {
           String newKb = km.special.substring(SPECIAL_SWITCH_TO.length());
-          sk.switchKeyboard(newKb);
+          sk.keyboardView.updateKeyboard(newKb);
         }
       }
       else
       {
         sk.focusComponent.onAction(Action.fromKeyTyped(km.c), 0, 0);
+        System.out.println("Entered: " + km.c); //TODO: Logger, or delete
       }
     }
     return true;
@@ -200,6 +168,7 @@ public class SoftKeyboard implements IKeyboard
 
       @Override
       public boolean onAction(Action action, int xShift, int yShift) {
+        if (action.type != Action.AType.MouseClicked) { return false; }
         if (sk.keyboardView.menu.intersect(action.x + xShift, action.y + yShift))
         {
           return onPressed(sk, action.x + xShift, action.y + yShift);
@@ -222,12 +191,15 @@ public class SoftKeyboard implements IKeyboard
     Label img;
     float scalerX;
     float scalerY;
+    String viewRes;
 
-    public KeyboardView(String initialViewRes, SoftKeyboard sk)
+    /** Creates an empty keyboardView, set with updateKeyboard(str) */
+    public KeyboardView(SoftKeyboard sk)
     {
-      updateKeyboard(initialViewRes);
       menu.addComponent(genActionComponent(sk), null);
     }
+
+    public String getViewRes() { return viewRes; }
 
     public void updateKeyboard(String viewRes)
     {
@@ -235,22 +207,21 @@ public class SoftKeyboard implements IKeyboard
       {
         menu.removeComponent(img);
       }
+      this.viewRes = viewRes;
       img = Label.fromResource(viewRes);
       Point oriSize = img.getImage().getSize();
       Point frameSize = FrameFactory.getFrame().getContent().getSize();
       if (frameSize.x == 0 || frameSize.y == 0)
       {
-        frameSize = new Point(FrameFactory.getFrame().getSize().x, FrameFactory.getFrame().getSize().y);
-      }
-      if (frameSize.x == 0 || frameSize.y == 0)
-      {
         //Dont scale.
         scalerX = 1;
         scalerY = 1;
+        System.out.println("Update KeyboardView while Component size still 0"); //TODO: WARN
       }
       else
       {
         frameSize.y = frameSize.y / 4;
+        menu.getPos().y = frameSize.y*3;
         scalerX = (float)oriSize.x / (float)frameSize.x;
         scalerY = (float)oriSize.y / (float)frameSize.y;
         Image newImg = img.getImage().getScaledInstance(frameSize);
@@ -258,6 +229,7 @@ public class SoftKeyboard implements IKeyboard
       }
 
       menu.addComponent(img, null);
+      menu.getLayoutManager().pack(menu);
       menu.setShouldRender(true);
     }
 

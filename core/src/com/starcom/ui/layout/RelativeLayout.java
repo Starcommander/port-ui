@@ -51,4 +51,10 @@ public class RelativeLayout implements ILayoutManager{
             return super.toString() + ": posX=" + posX + " posY=" + posY + " width=" + sizeX + " height=" + sizeY;
         }
     }
+
+    @Override
+    public void pack(Container main) {
+        doLayout(main);
+        NullLayout.packNull(main);
+    }
 }

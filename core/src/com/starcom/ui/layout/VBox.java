@@ -42,4 +42,14 @@ public class VBox implements ILayoutManager{
         public VBoxConf(int minHight) { this.minHight = minHight; }
     }
 
+    @Override
+    public void pack(Container main) {
+        int minY = 0;
+        for (Component comp : main.getComponents())
+        {
+            minY += ((VBoxConf)comp.getLayoutConf()).minHight;
+        }
+        main.getSize().y = minY;
+    }
+
 }
