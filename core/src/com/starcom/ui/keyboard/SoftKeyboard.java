@@ -6,10 +6,12 @@ import java.util.HashMap;
 import com.starcom.ui.components.Component;
 import com.starcom.ui.components.ext.simple.ContextMenu;
 import com.starcom.ui.components.ext.simple.Label;
+import com.starcom.ui.components.ext.simple.TextField;
 import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Action;
 import com.starcom.ui.model.Point;
+import com.starcom.ui.model.Action.AType;
 import com.starcom.ui.render.IRenderer;
 
 public class SoftKeyboard implements IKeyboard
@@ -22,7 +24,6 @@ public class SoftKeyboard implements IKeyboard
 
   HashMap<String,ArrayList<KeyModel>> keyboards = new HashMap<>();
   KeyboardView keyboardView = new KeyboardView(this);
-  Component focusComponent;
 
   public SoftKeyboard()
   {
@@ -39,11 +40,12 @@ public class SoftKeyboard implements IKeyboard
   }
 
   @Override
-  public void show(Component focusComponent)
+  public void show(TextField focusComponent)
   {
-    this.focusComponent = focusComponent;
+    keyboardView.getMenu().setFocusComponent(focusComponent);
     keyboardView.updateKeyboard(PIX_KEYB_DEF);
     FrameFactory.getFrame().getContent().setContextMenu(keyboardView.getMenu());
+    focusComponent.setCursorVisible(true);
   }
 
   private static boolean onPressed(SoftKeyboard sk, int x, int y)
@@ -76,7 +78,7 @@ public class SoftKeyboard implements IKeyboard
       }
       else
       {
-        sk.focusComponent.onAction(Action.fromKeyTyped(km.c), 0, 0);
+        sk.keyboardView.getMenu().getFocusComponent().onAction(Action.fromKeyTyped(km.c), 0, 0);
         System.out.println("Entered: " + km.c); //TODO: Logger, or delete
       }
     }
@@ -140,48 +142,18 @@ public class SoftKeyboard implements IKeyboard
     return keyList;
   }
 
-
-  public static Component genActionComponent(SoftKeyboard sk)
-  {
-    return new Component() {
-      boolean shouldRender = true;
-
-      @Override
-      public boolean intersect(int x, int y) {
-        return intersectComponent(this, x, y);
-      }
-
-      @Override
-      public boolean shouldRender() {
-        return shouldRender;
-      }
-
-      @Override
-      public void setShouldRender(boolean shouldRender) {
-        this.shouldRender = shouldRender;
-      }
-
-      @Override
-      public IRenderer getFallbackRenderer() {
-        return (c,g,x,y) -> {};
-      }
-
-      @Override
-      public boolean onAction(Action action, int xShift, int yShift) {
-        if (action.type != Action.AType.MouseClicked) { return false; }
-        if (sk.keyboardView.menu.intersect(action.x + xShift, action.y + yShift))
-        {
-          return onPressed(sk, action.x + xShift, action.y + yShift);
-        }
-        else if (sk.focusComponent.onAction(action, xShift, yShift))
-        {
-          return true;
-        }
-        FrameFactory.getFrame().getContent().setContextMenu(null);
-        return true;
-      }
-      
-    };
+  public boolean onActionInternal(Action action, int xShift, int yShift) {
+    System.out.println("SoftKick"); //TODO clear
+    if (action.type != Action.AType.MouseClicked) { return false; }
+    if (Component.intersectComponent(keyboardView.menu, action.x, action.y))
+    {
+      System.out.println("Is intersecting"); //TODO clear
+      return onPressed(this, action.x + xShift, action.y + yShift);
+    }
+    TextField tf = (TextField)keyboardView.getMenu().getFocusComponent();
+    Point absPos = tf.getAbsolutePos();
+    tf.setCursorLocation(action.x - absPos.x, action.y - absPos.y);
+    return true;
   }
 
   public static class KeyboardView
@@ -196,7 +168,8 @@ public class SoftKeyboard implements IKeyboard
     /** Creates an empty keyboardView, set with updateKeyboard(str) */
     public KeyboardView(SoftKeyboard sk)
     {
-      menu.addComponent(genActionComponent(sk), null);
+      menu.setActionListener((a,x,y) -> sk.onActionInternal(a,x,y));
+      menu.setOnHide(() -> ((TextField)menu.getFocusComponent()).setCursorVisible(false) );
     }
 
     public String getViewRes() { return viewRes; }

@@ -16,6 +16,8 @@ import com.starcom.ui.render.IRenderer;
 
 public class ContextMenu extends Container{
     boolean shouldRender = true;
+    Component focusComponent;
+    Runnable onHide;
 
     public ContextMenu()
     {
@@ -41,6 +43,18 @@ public class ContextMenu extends Container{
         getSize().y = h;
         addComponent(sp, null);
     }
+
+    public void setOnHide(Runnable onHide) { this.onHide = onHide; }
+
+    /** Set an extra focus component.
+     * @see com.starcom.ui.keyboard.SoftKeyboard
+     * @param focusComponent The focusComponent that should not close the context menu. */
+    public void setFocusComponent(Component focusComponent)
+    {
+        this.focusComponent = focusComponent;
+    }
+
+    public Component getFocusComponent() { return focusComponent; }
 
     private Button genButton(String title, ISelectedListener subListener)
     {
@@ -78,9 +92,11 @@ public class ContextMenu extends Container{
 
     public void hide()
     {
+        if (onHide != null) { onHide.run(); }
         RootContainer c = (RootContainer)getParent();
         c.setShouldRender(true);
         c.setContextMenu(null);
+        setFocusComponent(null);
     }
 
     @Override
@@ -88,8 +104,16 @@ public class ContextMenu extends Container{
     {
         if (!Component.intersectComponent(this, action.x + xShift, action.y + yShift))
         {
-            if (action.type == Action.AType.MouseClicked) { hide(); }
-            return true;
+            if (!Component.intersectComponent(focusComponent, action.x + xShift, action.y + yShift))
+            {
+                if (action.type == Action.AType.MouseClicked) { hide(); }
+                return true;
+            }
+        }
+        if (this.getActionListener() != null)
+        {
+            boolean consumed = this.getActionListener().onAction(action, xShift - getPos().x, yShift - getPos().y);
+            if (consumed) { return true; }
         }
         return onActionComponents(action, xShift, yShift);
     }

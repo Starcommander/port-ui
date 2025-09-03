@@ -41,11 +41,6 @@ public abstract class Container extends Component
     return false;
   }
 
-  public void setActionListener(String todo) //Close, Click, Touch/DnD, Key
-  {
-    //TODO: on action execute it on component
-  }
-
   /** Adds the component.
    * @param c The component to add.
    * @param layoutConf The layoutConf that belongs to current LayoutManager, may be null if LayoutManager is NullLayout.

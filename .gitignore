@@ -1,3 +1,4 @@
 core/target/*
 impl/*/target/*
 examples/*/target/*
+examples/*/dependency-reduced-pom.xml

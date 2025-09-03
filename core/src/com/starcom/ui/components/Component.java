@@ -21,6 +21,19 @@ public abstract class Component
   /** Sets the IActionListener that can be used by implementing class. */
   public void setActionListener(IActionListener al) { this.al = al; }
   public IActionListener getActionListener() { return al; }
+  public Point getAbsolutePos()
+  {
+    int x = getPos().x;
+    int y = getPos().y;
+    Container curParent = getParent();
+    while (curParent != null)
+    {
+      x += curParent.getPos().x;
+      y += curParent.getPos().y;
+      curParent = curParent.getParent();
+    }
+    return new Point(x,y);
+  }
 
   /** Checks if coordinate intersects this component, used for action handling.
    * @param x The x coordinate, often action.x + xShift.
