@@ -21,6 +21,7 @@ public class SoftKeyboard implements IKeyboard
   public static final String SPECIAL_SWITCH_TO = "s=";
   private static final String PIX_KEYB_DEF = "/keyb-def.png";
   private static final String PIX_KEYB_DEF_UP = "/keyb-def-up.png";
+  private static final String PIX_KEYB_DEF_NUM = "/keyb-def-num.png";
 
   HashMap<String,ArrayList<KeyModel>> keyboards = new HashMap<>();
   KeyboardView keyboardView = new KeyboardView(this);
@@ -29,6 +30,7 @@ public class SoftKeyboard implements IKeyboard
   {
     keyboards.put(PIX_KEYB_DEF, createKeyList(false));
     keyboards.put(PIX_KEYB_DEF_UP, createKeyList(true));
+    keyboards.put(PIX_KEYB_DEF_NUM, createKeyListNum());
   }
 
   /** *  List of keyboards.
@@ -136,6 +138,63 @@ public class SoftKeyboard implements IKeyboard
     
     y = 360;
     x = 230;
+    spec = SPECIAL_SWITCH_TO + PIX_KEYB_DEF_NUM;
+    keyList.add(new KeyModel(' ', 10, y, (int)(1.5f*w), h, spec)); // NUM
+    keyList.add(new KeyModel(' ', x, y, 4*w, h, null)); x+=(4*w);// Space
+    //keyList.add(new KeyModel(' ', x, y, 3*w, h, SPECIAL_ENTER)); // Enter
+    keyList.add(new KeyModel('\n', x, y, 3*w, h, null)); // Enter
+    return keyList;
+  }
+
+  private ArrayList<KeyModel> createKeyListNum()
+  {
+    ArrayList<KeyModel> keyList = new ArrayList<>();
+    int x = 8;
+    int y = 40;
+    int w = 58;
+    int h = 82;
+    keyList.add(new KeyModel((char)('1'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('2'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('3'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('4'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('5'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('6'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('7'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('8'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('9'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('0'), x, y, w, h, null));
+    
+    x = 38;
+    y = 146;
+    keyList.add(new KeyModel((char)('.'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)(','), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)(':'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)(';'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('-'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('_'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('#'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('+'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('*'), x, y, w, h, null));
+    
+    x=102;
+    y=250;
+    keyList.add(new KeyModel((char)('?'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('='), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('/'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('\\'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('('), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)(')'), x, y, w, h, null)); x+=63;
+    keyList.add(new KeyModel((char)('"'), x, y, w, h, null)); x+=63;
+    
+    //keyList.add(new KeyModel(' ', x, y, 2*w, h, SPECIAL_DEL)); // Delete
+    keyList.add(new KeyModel('\b', x, y, 2*w, h, null)); // Delete
+    
+    y = 360;
+    x = 230;
+
+    String spec = SPECIAL_SWITCH_TO + PIX_KEYB_DEF;
+    keyList.add(new KeyModel(' ', 10, y, (int)(1.5f*w), h, spec)); // NUM
+
     keyList.add(new KeyModel(' ', x, y, 4*w, h, null)); x+=(4*w);// Space
     //keyList.add(new KeyModel(' ', x, y, 3*w, h, SPECIAL_ENTER)); // Enter
     keyList.add(new KeyModel('\n', x, y, 3*w, h, null)); // Enter
