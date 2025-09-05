@@ -25,6 +25,14 @@ public class FrameFactory
     return frameImpl;
   }
 
+  /** Allows to use non-default constructor.
+   * @param frame The frame to use, for example using an existing frame. */
+  public static void presetFrame(IFrame frame)
+  {
+    if (frameImpl != null) { throw new IllegalStateException("Frame was already created."); }
+    frameImpl = frame;
+  }
+
   public static IKeyboard getKeyboard()
   {
     return keyboard;

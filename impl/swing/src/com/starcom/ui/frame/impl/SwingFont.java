@@ -41,6 +41,10 @@ public class SwingFont extends Font
 
     @Override
     public Image genTextImage(String txt, Color color) {
+        if (txt.length() == 0)
+        {
+          return new SwingImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
+        }
         Point size = calcTextSize(txt);
         BufferedImage img = new BufferedImage(size.x, size.y, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graph = img.createGraphics();

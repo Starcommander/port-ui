@@ -12,6 +12,7 @@ public abstract class Font
   Style style = Style.Plain;
 
   public abstract String[] getFonts();
+  /** Should return an empty image, if string empty. */
   public abstract Image genTextImage(String txt, Color color);
   public abstract Point calcTextSize(String txt);
 
