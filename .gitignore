@@ -1,4 +1,6 @@
 core/target/*
 impl/*/target/*
+impl/*/dependency-reduced-pom.xml
 examples/*/target/*
 examples/*/dependency-reduced-pom.xml
+.vscode
