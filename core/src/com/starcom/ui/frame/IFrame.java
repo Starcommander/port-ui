@@ -3,6 +3,8 @@ package com.starcom.ui.frame;
 import com.starcom.ui.model.Point;
 import com.starcom.ui.components.RootContainer;
 
+/** The implementation of IFrame catches all actions and forwards them to the RootContainer.<br>
+ * It is also responsible for a looper-Thread, that executes rootContainer.onRender(width, height, graphics) */
 public interface IFrame
 {
   public IFrameGraphics getGraphicsImpl();

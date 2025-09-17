@@ -12,6 +12,6 @@ Using in other projects:
 - Then add port-ui-core and an implementation.
 ```
 implementation 'com.github.Starcommander:port-ui:core:1.0'
-implementation 'com.github.Starcommander:port-ui:portui-impl-swing:1.0'
+implementation 'com.github.Starcommander:port-ui:impl-swing:1.0'
 ```
 - See also [Jitpack](https://jitpack.io/)

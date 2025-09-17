@@ -5,6 +5,7 @@ import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.model.Action;
 import com.starcom.ui.model.Point;
+import com.starcom.ui.model.Color;
 import com.starcom.ui.render.IRenderer;
 
 public class RootContainer extends Container {
@@ -21,6 +22,16 @@ public class RootContainer extends Container {
     @Override
     public void setShouldRender(boolean shouldRender) {
         this.shouldRender = shouldRender;
+    }
+
+    public void onRender(int width, int height, IFrameGraphics graphics)
+    {
+      getSize().set(width, height);
+      getLayoutManager().doLayout(this);
+      getLayoutManager().doLayoutSub(this);
+      Color c = new Color(255, 255, 255, 255);
+      graphics.drawFilledRect(c, 0, 0, width, height);
+      getRenderer().render(this, graphics, 0,0);
     }
 
     @Override

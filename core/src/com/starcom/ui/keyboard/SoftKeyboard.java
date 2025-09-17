@@ -217,7 +217,6 @@ public class SoftKeyboard implements IKeyboard
 
   public static class KeyboardView
   {
-    boolean shouldRender = true;
     ContextMenu menu = new ContextMenu();
     Label img;
     float scalerX;

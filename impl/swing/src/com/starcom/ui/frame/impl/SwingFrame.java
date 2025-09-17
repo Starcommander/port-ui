@@ -26,13 +26,19 @@ import com.starcom.ui.model.Point;
 public class SwingFrame implements IFrame
 {
     static Logger logger = java.util.logging.Logger.getLogger(SwingFrame.class.getName());
-    JFrame jframe = new JFrame();
+    JFrame jframe;
     RootContainer content = new RootContainer();
     SwingFrameGraphics graphics;
     public SwingFrame()
     {
+        this(new JFrame());
+    }
+
+    public SwingFrame(JFrame jframe)
+    {
+        this.jframe = jframe;
         jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        jframe.setContentPane(genContentPane());
+        jframe.getContentPane().add(genContentPane());
         jframe.getContentPane().addComponentListener(genComponentListener());
         jframe.getContentPane().addKeyListener(genKeyListener());
         jframe.getContentPane().addMouseListener(genMouseListener());
@@ -55,12 +61,7 @@ public class SwingFrame implements IFrame
                 if (!getContent().shouldRender()) { return; }
                 super.paintComponent(g);
                 SwingFrameGraphics.preRender(g);
-                getContent().getSize().set(SwingFrame.this.getSize().x, SwingFrame.this.getSize().y);
-                getContent().getLayoutManager().doLayout(getContent());
-                getContent().getLayoutManager().doLayoutSub(getContent());
-                Color c = new Color(255, 255, 255, 255);
-                graphics.drawFilledRect(c, SwingFrame.this.getSize().x, SwingFrame.this.getSize().y, 0, 0);
-                getContent().getRenderer().render(getContent(), graphics, 0,0);
+                getContent().onRender(SwingFrame.this.getSize().x, SwingFrame.this.getSize().y, graphics);
                 SwingFrameGraphics.postRender();
             }
         };

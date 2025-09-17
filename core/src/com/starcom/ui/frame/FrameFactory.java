@@ -25,6 +25,24 @@ public class FrameFactory
     return frameImpl;
   }
 
+  /** Initializes the IFrame with existing frameObject.
+   * <ul>
+   * <li>On Lwjgl this is the window-long pointer as Long.</li>
+   * <li>On Swing this is the JFrame for attaching Listeners and a JPanel for painting.</li>
+   * <li>On Android ...... Activity?</li>
+   * </ul>*/
+  public void setFromFrame(Object o)
+  {
+      if (frameImpl != null) { throw new IllegalStateException("Cannot setFrameObject() because already initialized."); }
+      Class clazz;
+      try {
+        clazz = Class.forName(FRAME_IMPL);
+        frameImpl = (IFrame)clazz.getDeclaredConstructor(java.lang.Object.class).newInstance(o);
+      } catch (Exception e) {
+        throw new IllegalStateException("Frame implemention missing in project", e);
+      }
+  }
+
   /** Allows to use non-default constructor.
    * @param frame The frame to use, for example using an existing frame. */
   public static void presetFrame(IFrame frame)

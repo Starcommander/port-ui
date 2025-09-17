@@ -82,6 +82,7 @@ public class ContextMenu extends Container{
     {
         g.drawFilledRect(Color.GRAY_BRIGHT_BRIGHT, menu.getPos().x + xShift, menu.getPos().y + yShift, menu.getSize().x, menu.getSize().y);
         renderComponents(menu,g,xShift,yShift);
+        menu.setShouldRender(false);
     }
 
     @Override
