@@ -9,6 +9,7 @@ import com.starcom.ui.frame.Font;
 import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Color;
 import com.starcom.ui.model.Point;
+import com.starcom.ui.model.Rect;
 import com.starcom.ui.frame.impl.lwjgl.Truetype;
 
 public class LwjglFont extends Font{
@@ -61,9 +62,9 @@ public class LwjglFont extends Font{
             LwjglGraphics.cleanupList.add(this); //TODO: Use one cdata for all fontImages
         }
 
-        public void doRender(long window, int x, int y)
+        public void doRender(long window, int x, int y, Rect visibleRect)
         {
-            Truetype.loopStep(window, text, x, y, 0, fontData, FONT_HEIGHT, 1/scaleX, 1/scaleY, false, KERNING_ENABLED, cdata, color);
+            Truetype.loopStep(window, text, x, y, 0, fontData, FONT_HEIGHT, 1/scaleX, 1/scaleY, false, KERNING_ENABLED, cdata, color, visibleRect);
         }
 
         @Override

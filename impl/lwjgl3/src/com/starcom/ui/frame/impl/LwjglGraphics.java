@@ -107,7 +107,7 @@ glVertex2f(size.x-50f + width, size.y-50f);
 if (img instanceof FontImage)
 {
     FontImage fi = (FontImage)img;
-    fi.doRender(window, x, y);
+    fi.doRender(window, x, y, null);
 }
 else
 {
@@ -152,7 +152,7 @@ yRatio = xyStore;
         if (img instanceof FontImage)
         {
             FontImage fi = (FontImage)img;
-            fi.doRender(window, x, y); //TODO: Implement partial draw.
+            fi.doRender(window, x, y, visibleRect);
         }
         else
         {

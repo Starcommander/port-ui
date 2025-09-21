@@ -9,6 +9,7 @@ import org.lwjgl.stb.*;
 import org.lwjgl.system.*;
 
 import com.starcom.ui.model.Color;
+import com.starcom.ui.model.Rect;
 
 import java.io.*;
 import java.nio.*;
@@ -108,7 +109,7 @@ public final class Truetype extends FontDemo {
             // Scroll
             glTranslatef(4.0f, getFontHeight() * 0.5f + 4.0f - getLineOffset() * getFontHeight(), 0f);
 
-            renderText(text, cdata, BITMAP_W, BITMAP_H, info, getFontHeight(), getContentScaleX(), getContentScaleY(), isLineBBEnabled(), isKerningEnabled(), fd);
+            renderText(text, cdata, BITMAP_W, BITMAP_H, info, getFontHeight(), getContentScaleX(), getContentScaleY(), isLineBBEnabled(), isKerningEnabled(), fd, null);
 
             glPopMatrix();
 
@@ -122,7 +123,7 @@ public final class Truetype extends FontDemo {
      * @param lineOffset For multiLine the offset.
      * @param fontHeight The font height for example 24
      */
-    public static void loopStep(long window, String text, int xShift, int yShift, int lineOffset, FontData fontData, int fontHeight, float contentScaleX, float contentScaleY, boolean lineBBEnabled, boolean kerningEnabled, STBTTBakedChar.Buffer cdata, Color c)
+    public static void loopStep(long window, String text, int xShift, int yShift, int lineOffset, FontData fontData, int fontHeight, float contentScaleX, float contentScaleY, boolean lineBBEnabled, boolean kerningEnabled, STBTTBakedChar.Buffer cdata, Color c, Rect visibleRect)
     {
 //        glClearColor(43f / 255f, 43f / 255f, 43f / 255f, 0f); // BG color
         glColor3f(c.r / 255f, c.g / 255f, c.b / 255f); // Text color
@@ -132,7 +133,7 @@ public final class Truetype extends FontDemo {
         // Scroll
         glTranslatef(xShift, yShift - lineOffset * fontHeight + fontHeight, 0f);
 
-        renderText(text, cdata, BITMAP_W, BITMAP_H, fontData.info, fontHeight, contentScaleX, contentScaleY, lineBBEnabled, kerningEnabled, fontData);
+        renderText(text, cdata, BITMAP_W, BITMAP_H, fontData.info, fontHeight, contentScaleX, contentScaleY, lineBBEnabled, kerningEnabled, fontData, visibleRect);
 
         glPopMatrix();
 
@@ -142,7 +143,7 @@ public final class Truetype extends FontDemo {
         return (offset - center) * factor + center;
     }
 
-    private static void renderText(String text, STBTTBakedChar.Buffer cdata, int BITMAP_W, int BITMAP_H, STBTTFontinfo info, int fontHeight, float contentScaleX, float contentScaleY, boolean lineBBEnabled, boolean kerningEnabled, FontData fontData) {
+    private static void renderText(String text, STBTTBakedChar.Buffer cdata, int BITMAP_W, int BITMAP_H, STBTTFontinfo info, int fontHeight, float contentScaleX, float contentScaleY, boolean lineBBEnabled, boolean kerningEnabled, FontData fontData, Rect visibleRect) {
         float scale = stbtt_ScaleForPixelHeight(info, fontHeight);
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);
@@ -197,6 +198,19 @@ public final class Truetype extends FontDemo {
                     y0 = scale(lineY, q.y0(), factorY),
                     y1 = scale(lineY, q.y1(), factorY);
 
+                if (visibleRect != null)
+                {
+                    if (visibleRect.pos.y > 0)
+                    {
+                        y0 += visibleRect.pos.y;
+                        if (y0 > y1) { y0 = y1; }
+                    }
+                    if ((visibleRect.pos.y + visibleRect.size.y) < fontHeight )
+                    {
+                        y1 += (visibleRect.pos.y + visibleRect.size.y) - fontHeight;
+                        if (y1 < y0) { y1 = y0; }
+                    }
+                }
                 glTexCoord2f(q.s0(), q.t0());
                 glVertex2f(x0, y0);
 
