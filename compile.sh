@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$1" ]; then
+  echo "Usage args: swing|lwjgl3"
+  exit 1
+fi
+
 build_module() # Args: modName
 {
   cd "$1"
@@ -9,8 +14,8 @@ build_module() # Args: modName
 }
 
 build_module core
-build_module impl/swing
+build_module impl/$1
 
-cd examples/swing
+cd examples/$1
 ./build.sh
 cd -

@@ -135,11 +135,6 @@ float xyStore = xRatio;
 xRatio = yRatio;
 yRatio = xyStore;
 
-System.out.println("Draw: v1="+(x1 + xRatio)+"," + (y1 + yRatio));
-System.out.println("- v2=" + (x1 - xRatio) + "," +  (y1 - yRatio));
-System.out.println("- v3=" + (x2 - xRatio) + "," + (y2 - yRatio));
-System.out.println("- v4=" + (x2 + xRatio) + "," + (y2 + yRatio));
-
         glBegin(GL11.GL_QUADS);
         {
             glVertex2f(x1 + xRatio, y1 + yRatio);

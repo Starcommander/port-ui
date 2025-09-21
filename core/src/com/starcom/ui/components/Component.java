@@ -42,7 +42,7 @@ public abstract class Component
    * @see Component.intersectComponent */
   public abstract boolean intersect(int x, int y);
 
-  /** The default intersect function used by components. */
+  /** The default intersect function used by components inside a container. */
   public static boolean intersectComponent(Component c, int x, int y)
   {
     if (x < c.getPos().x) { return false; }
@@ -51,7 +51,7 @@ public abstract class Component
     if (y > (c.getPos().y + c.getSize().y)) { return false; }
     if (c.getParent() != null)
     { // Check, is this component visible on container
-      return c.getParent().intersect(x, y);
+      return c.getParent().intersect(x + c.getParent().getPos().x, y + c.getParent().getPos().y);
     }
     return true;
   }

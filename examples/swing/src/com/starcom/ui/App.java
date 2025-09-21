@@ -19,17 +19,29 @@ public class App {
     public static void main(String[] args) throws Exception {
         IFrame frame = FrameFactory.getFrame();
         frame.setTitle("The portable GUI");
-        //addSimpleButton(frame);
-        //addScrollPaneButton(frame);
-        //addScrollPaneButtons(frame);
-        //addScrollPaneRelativeButtons(frame);
-        //addDropDown(frame);
-        addTextField(frame);
+        addExample(frame, "TextField", () -> addTextField(frame), 30);
+        addExample(frame, "DropDown", () -> addDropDown(frame), 60);
+        addExample(frame, "ScrollPaneRelativeButtons", () -> addScrollPaneRelativeButtons(frame), 90);
+        addExample(frame, "ScrollPaneButtons", () -> addScrollPaneButtons(frame), 120);
+        addExample(frame, "ScrollPaneButton", () -> addScrollPaneButton(frame), 150);
+        addExample(frame, "SimpleButton", () -> addSimpleButton(frame), 180);
 
         frame.setVisible(true);
     }
 
+    private static void addExample(IFrame frame, String txt, Runnable run, int y)
+    {
+      Button b = new Button(txt);
+      b.setActionListener((a,xx,yy) -> {run.run(); return true;} );
+      b.getSize().x = 300;
+      b.getSize().y = 30;
+      b.getPos().x = 30;
+      b.getPos().y = y;
+      frame.getContent().addComponent(b, null);
+    }
+
     private static void addTextField(IFrame frame) {
+        frame.getContent().clearComponents();
         TextField tf = new TextField("Initial Text");
         tf.getSize().x = 300;
         tf.getSize().y = 60;
@@ -40,6 +52,7 @@ public class App {
     }
 
     private static void addDropDown(IFrame frame) {
+        frame.getContent().clearComponents();
         DropDown d = new DropDown((s) -> System.out.println("Submenu: " + s), "One", "Two", "Three");
         d.getSize().x = 90;
         d.getSize().y = 60;
@@ -50,6 +63,7 @@ public class App {
 
     static void addScrollPaneButton(IFrame frame)
     {
+        frame.getContent().clearComponents();
         ScrollPane sp = genScrollPane();
         Button b = genSimpleButton();
         b.getSize().y = 800;
@@ -60,25 +74,28 @@ public class App {
 
     static void addScrollPaneRelativeButtons(IFrame frame)
     {
+        frame.getContent().clearComponents();
         ScrollPane sp = genScrollPane();
         sp.setLayoutManager(new VBox());
         frame.getContent().setLayoutManager(new RelativeLayout());
         for (int i=0; i<50; i++)
-            sp.addComponent(genSimpleButton(), new VBoxConf(30));
+            sp.addComponent(genSimpleButton(i), new VBoxConf(30));
         frame.getContent().addComponent(sp, new RelativeLayoutConf(0f,0f,1f,0.8f));
         frame.getContent().addComponent(genSimpleButton(), new RelativeLayoutConf(0f,0.8f,1f,0.2f));
     }
 
     static void addScrollPaneButtons(IFrame frame)
     {
+        frame.getContent().clearComponents();
         ScrollPane sp = genScrollPane();
         sp.setLayoutManager(new VBox());
         for (int i=0; i<50; i++)
-            sp.addComponent(genSimpleButton(), new VBoxConf(30));
+            sp.addComponent(genSimpleButton(i), new VBoxConf(30));
         frame.getContent().addComponent(sp, null);
     }
     static void addSimpleButton(IFrame frame)
     {
+        frame.getContent().clearComponents();
         frame.getContent().addComponent(genSimpleButton(), null);
     }
 
@@ -92,9 +109,11 @@ public class App {
         return sp;
     }
 
-    static Button genSimpleButton()
+    static Button genSimpleButton() { return genSimpleButton("Simple Button"); }
+    static Button genSimpleButton(int idx) { return genSimpleButton("Simple Button:" + idx); }
+    static Button genSimpleButton(String txt)
     {
-        Button b = new Button("Simple Button");
+        Button b = new Button(txt);
         b.getSize().x = 300;
         b.getSize().y = 150;
         b.getPos().x = 30;

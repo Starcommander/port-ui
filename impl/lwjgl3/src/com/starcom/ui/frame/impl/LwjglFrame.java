@@ -42,6 +42,7 @@ public class LwjglFrame implements IFrame {
 	LwjglGraphics graphics;
 	RootContainer content = new RootContainer();
 	Point mousePos = new Point();
+	boolean isMouseDown = false;
 
 	private void run() {
 		System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -68,7 +69,7 @@ public class LwjglFrame implements IFrame {
 		oldMouseButtonCallback = glfwSetMouseButtonCallback(window, GLFWMouseButtonCallback.create((win,but,act,mod) -> onMouseButton(but, act, mod) ));
 		oldKeyCallback = glfwSetKeyCallback(window, GLFWKeyCallback.create( (win, key, scancode, action, mod) -> onKey(key, scancode, action, mod) ));
 		oldCharCallback = glfwSetCharCallback(window, GLFWCharCallback.create( (w,c) -> onChar(c) ));
-		oldScrollCallback = glfwSetScrollCallback(window, GLFWScrollCallback.create( (w,x,y) -> onScroll(x,y) ));
+		oldScrollCallback = glfwSetScrollCallback(window, GLFWScrollCallback.create( (w,x,y) -> onScroll(-x*30,-y*30) ));
 		oldCursorPosCallback = glfwSetCursorPosCallback(window, GLFWCursorPosCallback.create( (w,x,y) -> onCursorPos(x,y) ));
 		//oldWindowResizeCallback = glfwSetWindowSizeCallback(window, (w,x,y) -> onWindowResize(x,y));
 		oldWindowRefreshCallback = glfwSetWindowRefreshCallback(window, (w) -> onWindowRefresh());
@@ -84,11 +85,11 @@ public class LwjglFrame implements IFrame {
 	// 	content.setShouldRender(true);
 	// 	if (oldWindowResizeCallback != null) { oldWindowResizeCallback.invoke(window, x, y); }
 	// }
-
 	private void onCursorPos(double x, double y)
 	{
 		mousePos.set((int)x,(int)y);
-		if (oldMouseButtonCallback != null) { oldCursorPosCallback.invoke(window, x, y); }
+		if (isMouseDown) content.onAction(Action.fromMouseDragged(mousePos.x, mousePos.y), 0, 0);
+		if (oldCursorPosCallback != null) { oldCursorPosCallback.invoke(window, x, y); }
 	}
 
 	private void onMouseButton(int button, int action, int mod)
@@ -96,13 +97,15 @@ public class LwjglFrame implements IFrame {
 		System.out.println("MouseAction(" +button+ "): " + action + "/" + mod );
 		if (action==0)
 		{
-			content.onAction(Action.fromMouseReleased(mousePos.x, mousePos.y, button+1), 0, 0);
-			content.onAction(Action.fromMouseClicked(mousePos.x, mousePos.y, button+1), 0, 0);
+			content.onAction(Action.fromMouseReleased(mousePos.x, mousePos.y, button), 0, 0);
+			content.onAction(Action.fromMouseClicked(mousePos.x, mousePos.y, button), 0, 0);
+			if (button==0) { isMouseDown = false; }
 			System.out.println("Click: " + mousePos.x + "/" + mousePos.y); //TODO: Logger or cleanup
 		}
 		else
 		{
-			content.onAction(Action.fromMousePressed(mousePos.x, mousePos.y, button+1), 0, 0);
+			content.onAction(Action.fromMousePressed(mousePos.x, mousePos.y, button), 0, 0);
+			if (button==0) { isMouseDown = true; }
 		}
 
 		if (oldMouseButtonCallback != null) { oldMouseButtonCallback.invoke(window, button, action, mod); }
@@ -204,7 +207,7 @@ public class LwjglFrame implements IFrame {
 
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
-		while ( !glfwWindowShouldClose(window) || shouldCleanup ) {
+		while ( !glfwWindowShouldClose(window) && !shouldCleanup ) {
 			if (content.shouldRender())
 			{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer

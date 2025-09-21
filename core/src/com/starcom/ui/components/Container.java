@@ -21,20 +21,20 @@ public abstract class Container extends Component
    * @param yShift The yShift got from render function (do not add pos.y) */
   public static void renderComponents(Container c, IFrameGraphics frameGraphics, int xShift, int yShift)
   {
-    for (Component child : c.components)
+    for (Component child : c.components.toArray(new Component[0]))
     {
       child.getRenderer().render(child, frameGraphics, c.getPos().x + xShift, c.getPos().y + yShift);
     }
   }
   public boolean shouldRenderComponents() {
-    for (Component c : components)
+    for (Component c : components.toArray(new Component[0]))
     {
         if (c.shouldRender()) { return true; }
     }
     return false;
   }
   public boolean onActionComponents(Action action, int xShift, int yShift) {
-    for (Component c : components)
+    for (Component c : components.toArray(new Component[0]))
     {
       if (c.onAction(action, xShift - getPos().x, yShift - getPos().y)) { return true; }
     }
@@ -62,6 +62,13 @@ public abstract class Container extends Component
     return has;
   }
   public ArrayList<Component> getComponents() { return components; }
+  public void clearComponents()
+  {
+    for (Component c : components.toArray(new Component[0]))
+    {
+      removeComponent(c);
+    }
+  }
   public void setLayoutManager(ILayoutManager layoutManager)
   {
     this.layoutManager = layoutManager;

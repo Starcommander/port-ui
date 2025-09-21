@@ -136,7 +136,6 @@ public final class Truetype extends FontDemo {
 
         glPopMatrix();
 
-        glfwSwapBuffers(window);
     }
 
     private static float scale(float center, float offset, float factor) {
