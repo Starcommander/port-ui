@@ -200,6 +200,8 @@ public final class Truetype extends FontDemo {
 
                 if (visibleRect != null)
                 {
+                    if (visibleRect.pos.x > x1) { continue; }
+                    if ((visibleRect.pos.x + visibleRect.size.x) < x0) { continue; }
                     if (visibleRect.pos.y > 0)
                     {
                         y0 += visibleRect.pos.y;

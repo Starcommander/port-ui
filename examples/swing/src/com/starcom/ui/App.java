@@ -67,7 +67,7 @@ public class App {
         ScrollPane sp = genScrollPane();
         Button b = genSimpleButton();
         b.getSize().y = 800;
-        b.getSize().x = 800;
+        b.getSize().x = 1600;
         sp.addComponent(b, null);
         frame.getContent().addComponent(sp, null);
     }
