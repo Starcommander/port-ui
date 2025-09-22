@@ -1,5 +1,7 @@
 package com.starcom.ui.components;
 
+import java.util.ArrayList;
+
 import com.starcom.ui.components.ext.simple.ContextMenu;
 import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.IFrameGraphics;
@@ -11,11 +13,13 @@ import com.starcom.ui.render.IRenderer;
 public class RootContainer extends Container {
     boolean shouldRender = true;
     ContextMenu menu;
+    public ArrayList<Runnable> extraRenderers = new ArrayList<>();
 
     @Override
     public boolean shouldRender() {
         if (shouldRender) { return true; }
         if (menu != null && menu.shouldRender()) { return true; }
+        if (!extraRenderers.isEmpty()) { return true; }
         return shouldRenderComponents();
     }
 
@@ -48,6 +52,10 @@ public class RootContainer extends Container {
     {
         Container.renderComponents(c, g, xShift, yShift);
         renderContextMenu(c.menu, g, xShift, yShift);
+        for (Runnable xRender : c.extraRenderers.toArray(new Runnable[0]))
+        {
+            xRender.run();
+        }
         c.setShouldRender(false);
     }
 

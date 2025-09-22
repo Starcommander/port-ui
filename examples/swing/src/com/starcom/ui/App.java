@@ -13,6 +13,7 @@ import com.starcom.ui.layout.RelativeLayout;
 import com.starcom.ui.layout.RelativeLayout.RelativeLayoutConf;
 import com.starcom.ui.layout.VBox;
 import com.starcom.ui.layout.VBox.VBoxConf;
+import com.starcom.ui.components.ext.simple.ToastMsg;
 
 public class App {
 
@@ -24,7 +25,7 @@ public class App {
         addExample(frame, "ScrollPaneRelativeButtons", () -> addScrollPaneRelativeButtons(frame), 90);
         addExample(frame, "ScrollPaneButtons", () -> addScrollPaneButtons(frame), 120);
         addExample(frame, "ScrollPaneButton", () -> addScrollPaneButton(frame), 150);
-        addExample(frame, "SimpleButton", () -> addSimpleButton(frame), 180);
+        addExample(frame, "ToastButton", () -> addToastButton(frame), 180);
 
         frame.setVisible(true);
     }
@@ -93,10 +94,12 @@ public class App {
             sp.addComponent(genSimpleButton(i), new VBoxConf(30));
         frame.getContent().addComponent(sp, null);
     }
-    static void addSimpleButton(IFrame frame)
+    static void addToastButton(IFrame frame)
     {
         frame.getContent().clearComponents();
-        frame.getContent().addComponent(genSimpleButton(), null);
+        Button b = genSimpleButton("Toast Button");
+        b.setActionListener((a,xx,yy) -> {ToastMsg.show("I am here as toast msg.",5000); return true;} );
+        frame.getContent().addComponent(b, null);
     }
 
     static ScrollPane genScrollPane()
