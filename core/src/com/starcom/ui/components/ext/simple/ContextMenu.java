@@ -107,8 +107,11 @@ public class ContextMenu extends Container{
         {
             if (!Component.intersectComponent(focusComponent, action.x + xShift, action.y + yShift))
             {
-                if (action.type == Action.AType.MouseClicked) { hide(); }
-                return true;
+                if (action.type == Action.AType.MouseClicked)
+                {
+                    hide();
+                    return true;
+                }
             }
         }
         if (this.getActionListener() != null)

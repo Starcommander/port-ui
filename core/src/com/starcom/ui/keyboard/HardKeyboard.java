@@ -10,7 +10,6 @@ public class HardKeyboard implements IKeyboard{
 
     @Override
     public void show(TextField focusComponent) {
-        focusComponent.setCursorVisible(true);
         menu.setFocusComponent(focusComponent);
         menu.setActionListener((a,x,y) -> onActionInternal(a,x,y));
         menu.setOnHide(() -> ((TextField)menu.getFocusComponent()).setCursorVisible(false) );
@@ -21,7 +20,7 @@ public class HardKeyboard implements IKeyboard{
         if (action.type != Action.AType.MouseClicked) { return false; }
         TextField tf = (TextField)menu.getFocusComponent();
         Point absPos = tf.getAbsolutePos();
-        tf.setCursorLocation(action.x - absPos.x, action.y - absPos.y);
+        tf.setCursorLocation(action.x - absPos.x, action.y - absPos.y); //TODO Update as softKeyboard
         return true;
     }
 }

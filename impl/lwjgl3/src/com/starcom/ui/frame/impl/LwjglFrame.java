@@ -13,6 +13,7 @@ import java.nio.*;
 import javax.imageio.ImageIO;
 
 import com.starcom.ui.components.RootContainer;
+import com.starcom.ui.components.ext.simple.TextField;
 import com.starcom.ui.frame.IFrame;
 import com.starcom.ui.frame.IFrameGraphics;
 import com.starcom.ui.frame.Image;
@@ -113,6 +114,57 @@ public class LwjglFrame implements IFrame {
 
 	private void onKey(int key, int scancode, int action, int mod)
 	{
+		if (key == GLFW_KEY_LEFT_CONTROL)
+		{
+			scancode = TextField.VK_LCONTROL;
+		}
+		else if (key == GLFW_KEY_DELETE)
+		{
+			scancode = TextField.VK_DELETE;
+		}
+		else if (key == GLFW_KEY_LEFT_ALT)
+		{
+			scancode = TextField.VK_LMENU;
+		}
+		else if (key == GLFW_KEY_UP)
+		{
+			scancode = TextField.VK_UP;
+		}
+		else if (key == GLFW_KEY_DOWN)
+		{
+			scancode = TextField.VK_DOWN;
+		}
+		else if (key == GLFW_KEY_LEFT)
+		{
+			scancode = TextField.VK_LEFT;
+		}
+		else if (key == GLFW_KEY_RIGHT)
+		{
+			scancode = TextField.VK_RIGHT;
+		}
+		else if (key == GLFW_KEY_TAB)
+		{
+			scancode = TextField.VK_TAB;
+		}
+		else if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT)
+		{
+			scancode = TextField.VK_SHIFT;
+		}
+		else if (key >= GLFW_KEY_A && key <= GLFW_KEY_Z)
+		{
+			scancode = key - GLFW_KEY_A;
+			scancode += 0x41;
+		}
+		else if (key >= GLFW_KEY_0 && key <= GLFW_KEY_9)
+		{
+			scancode = key - GLFW_KEY_0;
+			scancode += 0x30;
+		}
+		else if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F24)
+		{
+			scancode = key - GLFW_KEY_F1;
+			scancode += 0x70;
+		}
 		System.out.println("KeyAction(" +key+ "): " + scancode + "/" + action + "/" + mod );
 		if (action == 0)
 		{
@@ -230,7 +282,7 @@ public class LwjglFrame implements IFrame {
 			}
 
 			try{
-			Thread.sleep(50);
+			Thread.sleep(30);
 			} catch (Exception e) { e.printStackTrace(); }
 
 			// Poll for window events. The key callback above will only be
@@ -336,6 +388,16 @@ public class LwjglFrame implements IFrame {
 		{
 			glfwHideWindow(window);
 		}
+	}
+
+	@Override
+	public String getClipboardString() {
+		return glfwGetClipboardString(window);
+	}
+
+	@Override
+	public void setClipboardString(String txt) {
+		glfwSetClipboardString(window, txt);
 	}
 
 }

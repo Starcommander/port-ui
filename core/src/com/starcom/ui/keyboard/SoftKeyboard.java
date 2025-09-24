@@ -47,7 +47,6 @@ public class SoftKeyboard implements IKeyboard
     keyboardView.getMenu().setFocusComponent(focusComponent);
     keyboardView.updateKeyboard(PIX_KEYB_DEF);
     FrameFactory.getFrame().getContent().setContextMenu(keyboardView.getMenu());
-    focusComponent.setCursorVisible(true);
   }
 
   private static boolean onPressed(SoftKeyboard sk, int x, int y)
@@ -202,16 +201,17 @@ public class SoftKeyboard implements IKeyboard
   }
 
   public boolean onActionInternal(Action action, int xShift, int yShift) {
-    System.out.println("SoftKick"); //TODO clear
-    if (action.type != Action.AType.MouseClicked) { return false; }
     if (Component.intersectComponent(keyboardView.menu, action.x, action.y))
     {
-      System.out.println("Is intersecting"); //TODO clear
-      return onPressed(this, action.x + xShift, action.y + yShift);
+      if (action.type == Action.AType.MouseClicked)
+      {
+        return onPressed(this, action.x + xShift, action.y + yShift);
+      }
+      return true;
     }
     TextField tf = (TextField)keyboardView.getMenu().getFocusComponent();
     Point absPos = tf.getAbsolutePos();
-    tf.setCursorLocation(action.x - absPos.x, action.y - absPos.y);
+    tf.onAction(action, absPos.x, absPos.y);
     return true;
   }
 

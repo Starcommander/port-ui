@@ -6,12 +6,19 @@ import javax.swing.SwingUtilities;
 
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.event.WindowStateListener;
+import java.io.IOException;
 import java.util.logging.Logger;
 import java.awt.event.MouseAdapter;
 
@@ -40,10 +47,13 @@ public class SwingFrame implements IFrame
         jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jframe.getContentPane().add(genContentPane());
         jframe.getContentPane().addComponentListener(genComponentListener());
-        jframe.getContentPane().addKeyListener(genKeyListener());
+        jframe.setFocusable(true);
+        jframe.setFocusTraversalKeysEnabled(false);
+        jframe.addKeyListener(genKeyListener());
         jframe.getContentPane().addMouseListener(genMouseListener());
         jframe.getContentPane().addMouseWheelListener(genMouseListener());
         jframe.getContentPane().addMouseMotionListener(genMouseListener());
+        jframe.addWindowStateListener( (e) -> content.setShouldRender(true) );
         graphics = new SwingFrameGraphics(this);
 
         Point p = getMaxSize();
@@ -118,7 +128,10 @@ public class SwingFrame implements IFrame
 
             @Override
             public void keyTyped(KeyEvent e) {
-                content.onAction(Action.fromKeyTyped(e.getKeyChar()),0,0);
+                if (e.getModifiersEx() == 0 || e.getModifiersEx() == 64 || e.getModifiersEx() == 8192)
+                { // Only 'None' or 'Shift' or 'AltGr' allowed
+                    content.onAction(Action.fromKeyTyped(e.getKeyChar()),0,0);
+                }
             }};
     }
 
@@ -206,7 +219,7 @@ public class SwingFrame implements IFrame
             // This repaint() executes paintComponent of contentPane, see also genContentPane().
             jframe.getContentPane().repaint();
             try {
-                Thread.sleep(100);
+                Thread.sleep(30);
             } catch (InterruptedException e) {
                 e.printStackTrace(); //TODO: Use logger
                 break;
@@ -230,5 +243,38 @@ public class SwingFrame implements IFrame
         SwingImage img = (SwingImage)icon;
         jframe.setIconImage(img.parent);
         return true;
+    }
+
+    @Override
+    public String getClipboardString() {
+        Clipboard clipboard = java.awt.Toolkit.getDefaultToolkit().getSystemClipboard();
+        if (clipboard == null) return "";
+        Transferable contents = clipboard.getContents(null);
+        String result = "";
+        if (contents.isDataFlavorSupported(DataFlavor.stringFlavor))
+        {
+            try
+            {
+                result = (String) contents.getTransferData(DataFlavor.stringFlavor);
+            }
+            catch (Exception e)
+            {
+                //do nothing
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public void setClipboardString(String txt) {
+        Clipboard clipboard = java.awt.Toolkit.getDefaultToolkit().getSystemClipboard();
+        if (clipboard == null) return;
+        clipboard.setContents(new StringSelection(txt), new ClipboardOwner()
+        {
+            public void lostOwnership(Clipboard clipboard, Transferable contents)
+            {
+                //do nothing
+            }
+        });
     }
 }

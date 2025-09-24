@@ -25,4 +25,7 @@ public interface IFrame
    * @return True if supported
    */
   public boolean setIcon(Image icon);
+
+  public String getClipboardString();
+  public void setClipboardString(String txt);
 }
