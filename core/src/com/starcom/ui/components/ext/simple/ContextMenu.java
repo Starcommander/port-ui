@@ -14,7 +14,8 @@ import com.starcom.ui.model.Color;
 import com.starcom.ui.model.Point;
 import com.starcom.ui.render.IRenderer;
 
-public class ContextMenu extends Container{
+public class ContextMenu extends Container
+{
     boolean shouldRender = true;
     Component focusComponent;
     Runnable onHide;
@@ -103,7 +104,7 @@ public class ContextMenu extends Container{
     @Override
     public boolean onAction(Action action, int xShift, int yShift)
     {
-        if (!Component.intersectComponent(this, action.x + xShift, action.y + yShift))
+        if (!Component.intersectComponent(this, action.x + xShift, action.y + yShift) && focusComponent != null)
         {
             if (!Component.intersectComponent(focusComponent, action.x + xShift, action.y + yShift))
             {

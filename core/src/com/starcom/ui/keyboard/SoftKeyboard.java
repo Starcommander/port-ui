@@ -11,8 +11,6 @@ import com.starcom.ui.frame.FrameFactory;
 import com.starcom.ui.frame.Image;
 import com.starcom.ui.model.Action;
 import com.starcom.ui.model.Point;
-import com.starcom.ui.model.Action.AType;
-import com.starcom.ui.render.IRenderer;
 
 public class SoftKeyboard implements IKeyboard
 {
@@ -151,6 +149,7 @@ public class SoftKeyboard implements IKeyboard
     int x = 8;
     int y = 40;
     int w = 58;
+    int ww = (int)(1.35f*w);
     int h = 82;
     keyList.add(new KeyModel((char)('1'), x, y, w, h, null)); x+=63;
     keyList.add(new KeyModel((char)('2'), x, y, w, h, null)); x+=63;
@@ -189,10 +188,14 @@ public class SoftKeyboard implements IKeyboard
     keyList.add(new KeyModel('\b', x, y, 2*w, h, null)); // Delete
     
     y = 360;
-    x = 230;
+    x = 0;
 
     String spec = SPECIAL_SWITCH_TO + PIX_KEYB_DEF;
-    keyList.add(new KeyModel(' ', 10, y, (int)(1.5f*w), h, spec)); // NUM
+    keyList.add(new KeyModel(' ', x, y, ww, h, spec)); x+=ww; // NUM
+    keyList.add(new KeyModel('@', x, y, ww, h, null)); x+=ww;
+    keyList.add(new KeyModel('!', x, y, ww, h, null));
+
+    x = 230;
 
     keyList.add(new KeyModel(' ', x, y, 4*w, h, null)); x+=(4*w);// Space
     //keyList.add(new KeyModel(' ', x, y, 3*w, h, SPECIAL_ENTER)); // Enter
