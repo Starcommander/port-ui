@@ -6,6 +6,7 @@ public class FrameImpl extends LwjglFrame {
         super();
     }
 
+    /** In this case loopStep() must be called in render-Loop. */
     public FrameImpl(long window)
     {
         super(window);

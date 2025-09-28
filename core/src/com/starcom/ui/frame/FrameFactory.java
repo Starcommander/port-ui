@@ -27,7 +27,7 @@ public class FrameFactory
 
   /** Initializes the IFrame with existing frameObject.
    * <ul>
-   * <li>On Lwjgl this is the window-long pointer as Long.</li>
+   * <li>On Lwjgl this is the window-long pointer as Long. Additionally loopStep() must be called in render loop.</li>
    * <li>On Swing this is the JFrame for attaching Listeners and a JPanel for painting.</li>
    * <li>On Android ...... Activity?</li>
    * </ul>*/

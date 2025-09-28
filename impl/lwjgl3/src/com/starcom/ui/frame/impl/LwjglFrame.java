@@ -58,6 +58,7 @@ public class LwjglFrame implements IFrame {
 		initCallbacks();
 	}
 
+        /** In this case loopStep() must be called in render-Loop. */
 	public LwjglFrame(long window)
 	{
 		this.window = window;
@@ -246,20 +247,8 @@ public class LwjglFrame implements IFrame {
 		graphics = new LwjglGraphics(window);
 	}
 
-	private void loop() {
-		// This line is critical for LWJGL's interoperation with GLFW's
-		// OpenGL context, or any context that is managed externally.
-		// LWJGL detects the context that is current in the current thread,
-		// creates the GLCapabilities instance and makes the OpenGL
-		// bindings available for use.
-		GL.createCapabilities();
-
-		// Set the clear color
-//		glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
-
-		// Run the rendering loop until the user has attempted to close
-		// the window or has pressed the ESCAPE key.
-		while ( !glfwWindowShouldClose(window) && !shouldCleanup ) {
+        public void loopStep()
+        {
 			if (content.shouldRender())
 			{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
@@ -280,6 +269,24 @@ public class LwjglFrame implements IFrame {
 //graphics.drawLine(Color.BLUE, 10, 30, 30, 260, 30);
 			glfwSwapBuffers(window); // swap the color buffers
 			}
+
+        }
+
+	private void loop() {
+		// This line is critical for LWJGL's interoperation with GLFW's
+		// OpenGL context, or any context that is managed externally.
+		// LWJGL detects the context that is current in the current thread,
+		// creates the GLCapabilities instance and makes the OpenGL
+		// bindings available for use.
+		GL.createCapabilities();
+
+		// Set the clear color
+//		glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+
+		// Run the rendering loop until the user has attempted to close
+		// the window or has pressed the ESCAPE key.
+		while ( !glfwWindowShouldClose(window) && !shouldCleanup ) {
+                        loopStep();
 
 			try{
 			Thread.sleep(30);
