@@ -12,5 +12,6 @@
     <module>core</module>
     <module>examples/swing</module>
     <module>impl/swing</module>
+    <module>impl/lwjgl3</module>
   </modules>
 </project>
