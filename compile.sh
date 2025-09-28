@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ -z "$1" ]; then
   echo "Usage args: swing|lwjgl3"
   exit 1

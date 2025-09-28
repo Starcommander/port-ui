@@ -3,6 +3,7 @@ package com.starcom.ui;
 import java.io.FileInputStream;
 
 import com.starcom.ui.components.ScrollPane;
+import com.starcom.ui.components.Panel;
 import com.starcom.ui.components.ext.simple.Button;
 import com.starcom.ui.components.ext.simple.TextField;
 import com.starcom.ui.components.ext.simple.DropDown;
@@ -26,7 +27,7 @@ public class App {
         addExample(frame, "ScrollPaneButtons", () -> addScrollPaneButtons(frame), 120);
         addExample(frame, "ScrollPaneButton", () -> addScrollPaneButton(frame), 150);
         addExample(frame, "ToastButton", () -> addToastButton(frame), 180);
-
+        addExample(frame, "BorderPanels", () -> addBorderPanels(frame), 210);
         frame.setVisible(true);
     }
 
@@ -41,8 +42,14 @@ public class App {
       frame.getContent().addComponent(b, null);
     }
 
-    private static void addTextField(IFrame frame) {
+    private static void clearContent(IFrame frame)
+    {
         frame.getContent().clearComponents();
+        frame.getContent().setLayoutManager(null);
+    }
+
+    private static void addTextField(IFrame frame) {
+        clearContent(frame);
         TextField tf = new TextField("Initial Text");
         tf.getSize().x = 300;
         tf.getSize().y = 60;
@@ -53,7 +60,7 @@ public class App {
     }
 
     private static void addDropDown(IFrame frame) {
-        frame.getContent().clearComponents();
+        clearContent(frame);
         DropDown d = new DropDown((s) -> System.out.println("Submenu: " + s), "One", "Two", "Three");
         d.getSize().x = 90;
         d.getSize().y = 60;
@@ -64,7 +71,7 @@ public class App {
 
     static void addScrollPaneButton(IFrame frame)
     {
-        frame.getContent().clearComponents();
+        clearContent(frame);
         ScrollPane sp = genScrollPane();
         Button b = genSimpleButton();
         b.getSize().y = 800;
@@ -75,7 +82,7 @@ public class App {
 
     static void addScrollPaneRelativeButtons(IFrame frame)
     {
-        frame.getContent().clearComponents();
+        clearContent(frame);
         ScrollPane sp = genScrollPane();
         sp.setLayoutManager(new VBox());
         frame.getContent().setLayoutManager(new RelativeLayout());
@@ -87,7 +94,7 @@ public class App {
 
     static void addScrollPaneButtons(IFrame frame)
     {
-        frame.getContent().clearComponents();
+        clearContent(frame);
         ScrollPane sp = genScrollPane();
         sp.setLayoutManager(new VBox());
         for (int i=0; i<50; i++)
@@ -96,10 +103,23 @@ public class App {
     }
     static void addToastButton(IFrame frame)
     {
-        frame.getContent().clearComponents();
+        clearContent(frame);
         Button b = genSimpleButton("Toast Button");
         b.setActionListener((a,xx,yy) -> {ToastMsg.show("I am here as toast msg.",5000); return true;} );
         frame.getContent().addComponent(b, null);
+    }
+    static void addBorderPanels(IFrame frame)
+    {
+        clearContent(frame);
+        frame.getContent().setLayoutManager(new RelativeLayout());
+        Panel p1 = new Panel();
+        Panel p2 = new Panel();
+        Panel p3 = new Panel();
+        Panel p4 = new Panel();
+        frame.getContent().addComponent(p1, new RelativeLayout.RelativeLayoutConf(0.0f, 0.0f, 0.2f, 1.0f));
+        frame.getContent().addComponent(p2, new RelativeLayout.RelativeLayoutConf(0.8f, 0.0f, 0.2f, 1.0f));
+        frame.getContent().addComponent(p3, new RelativeLayout.RelativeLayoutConf(0.0f, 0.0f, 1.0f, 0.2f));
+        frame.getContent().addComponent(p4, new RelativeLayout.RelativeLayoutConf(0.0f, 0.8f, 1.0f, 0.2f));
     }
 
     static ScrollPane genScrollPane()
